@@ -1,5 +1,7 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -8,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -16,6 +19,8 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("car")
 public class CarResource {
+    
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Context
     private UriInfo context;
@@ -32,9 +37,10 @@ public class CarResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
+    @Path("test")
+    public Response getJson() {
         //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        return Response.ok().entity(gson.toJson("You are connected")).build();
     }
 
     /**
