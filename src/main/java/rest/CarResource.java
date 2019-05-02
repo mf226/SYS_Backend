@@ -38,7 +38,7 @@ public class CarResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("test")
-    public Response getJson() {
+    public Response test() {
         //TODO return proper representation object
         return Response.ok().entity(gson.toJson("You are connected")).build();
     }
