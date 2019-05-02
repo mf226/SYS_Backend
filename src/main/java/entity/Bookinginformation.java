@@ -117,7 +117,7 @@ public class Bookinginformation implements Serializable {
     private String fuelType;
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private User_1 user;
+    private User user;
 
     public Bookinginformation() {
     }
@@ -264,11 +264,11 @@ public class Bookinginformation implements Serializable {
         this.fuelType = fuelType;
     }
 
-    public User_1 getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User_1 user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -36,7 +36,7 @@ public class Rating implements Serializable {
     private int rating;
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private User_1 user;
+    private User user;
 
     public Rating() {
     }
@@ -66,11 +66,11 @@ public class Rating implements Serializable {
         this.rating = rating;
     }
 
-    public User_1 getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User_1 user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
