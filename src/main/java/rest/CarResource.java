@@ -58,7 +58,7 @@ public class CarResource {
     public Response getAllCars() throws MalformedURLException, IOException {
         DataFetcher df = new DataFetcher();
         //List<CarDTO> allCars = DataFetcher;
-        List<CarDTO> allCars = df.getAllCarsFromOneAPI(new URL("https://dueinator.dk/jwtbackend/api/car/all"));
+        List<CarDTO> allCars = df.getAllCarsFromOneAPI();
         return Response.ok().entity(gson.toJson(allCars)).build();
     }
 

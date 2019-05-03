@@ -3,6 +3,7 @@ package utils;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import dto.CarDTO;
+import entity.Company;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,12 +19,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Fen
  */
 public class DataFetcher {
+
+    public List<Company> companies;
+
+    public DataFetcher() {
+        companies = new ArrayList<>();
+        try {
+            companies.add(new Company("dueinator",new URL("https://www.dueinator.dk/jwtbackend/api/car/all")));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(DataFetcher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     class FetchCars implements Callable<String> {
 
@@ -55,14 +69,14 @@ public class DataFetcher {
 //        executor.shutdown();
 //        return results;
 //    }
-    public List<CarDTO> getAllCarsFromOneAPI(URL url) throws MalformedURLException, IOException {
-        //URL url = new URL("https://swapi.co/api/people/" + id);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    public List<CarDTO> getAllCarsFromOneAPI() throws MalformedURLException, IOException {
+        //URL url = new URL("https://www.swapi.co/api/people/" + id);
+        HttpURLConnection con = (HttpURLConnection) companies.get(0).getUrl().openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("User-Agent", "server");
 
-        return readJsonStream(con.getInputStream());
+        return readJsonStream(con.getInputStream(), companies.get(0).getName());
 //        Gson gson = new Gson();
 //        JsonReader newJsonReader = gson.newJsonReader(new InputStreamReader(con.getInputStream()));
 //        //Scanner scan = new Scanner(con.getInputStream());
@@ -79,27 +93,27 @@ public class DataFetcher {
 //        return jsonStr;
     }
 
-    public List<CarDTO> readJsonStream(InputStream in) throws IOException {
+    public List<CarDTO> readJsonStream(InputStream in, String company) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
-            return readMessagesArray(reader);
+            return readMessagesArray(reader, company);
         } finally {
             reader.close();
         }
     }
 
-    public List<CarDTO> readMessagesArray(JsonReader reader) throws IOException {
+    public List<CarDTO> readMessagesArray(JsonReader reader, String company) throws IOException {
         List<CarDTO> cars = new ArrayList<>();
 
         reader.beginArray();
         while (reader.hasNext()) {
-            cars.add(readMessage(reader));
+            cars.add(readMessage(reader, company));
         }
         reader.endArray();
         return cars;
     }
 
-    public CarDTO readMessage(JsonReader reader) throws IOException {
+    public CarDTO readMessage(JsonReader reader, String company) throws IOException {
         String regno = null;
         double price = 0;
         String manufactor = null;
@@ -167,7 +181,8 @@ public class DataFetcher {
             }
         }
         reader.endObject();
-        return new CarDTO(regno, price, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address, country);
+        return new CarDTO(regno, price, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address, country, company);
     }
 
+    //regno, price, manufactor, model, address
 }

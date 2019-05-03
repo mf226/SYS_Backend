@@ -18,9 +18,10 @@ public class CarDTO {
     private String latitude;
     private String address;
     private String country;
+    private String company;
     //private Collection<BookingInformationDTO> bookingInformationCollection;
 
-    public CarDTO(String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country) {
+    public CarDTO(String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country, String company) {
         this.regno = regno;
         this.price = price;
         this.manufactor = manufactor;
@@ -35,6 +36,7 @@ public class CarDTO {
         this.latitude = latitude;
         this.address = address;
         this.country = country;
+        this.company = company;
     }
 
     public String getRegno() {
@@ -51,6 +53,14 @@ public class CarDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getManufactor() {
@@ -156,5 +166,4 @@ public class CarDTO {
 //    public void setBookingInformationCollection(Collection<BookingInformationDTO> bookingInformationCollection) {
 //        this.bookingInformationCollection = bookingInformationCollection;
 //    }
-
 }
