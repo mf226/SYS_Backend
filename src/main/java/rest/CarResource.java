@@ -68,7 +68,7 @@ public class CarResource {
             return Response.ok().entity(gson.toJson(car)).build();
         } catch (Exception ex) {
             return gem.toResponse(ex);
-            
+
         }
 
     }
@@ -88,11 +88,11 @@ public class CarResource {
         }
 
     }
-    
-        @GET
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/available/{start}/{end}")
-    public Response getAllAvailableCars(@PathParam("regno") String start, @PathParam("company") String end) {
+    public Response getAllAvailableCars(@PathParam("start") String start, @PathParam("end") String end) {
         DataFetcher df = new DataFetcher();
         //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;

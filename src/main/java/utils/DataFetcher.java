@@ -80,7 +80,7 @@ public class DataFetcher {
     }
 
     public List<CarDTO> getAllAvailableCars(String start, String end) throws MalformedURLException, IOException {
-        String urlParamaters = "/available/" + start + "/" + end;
+        String urlParamaters = "available/" + start + "/" + end;
         HttpURLConnection con = (HttpURLConnection) new URL(companies.get(0).getUrl().concat(urlParamaters)).openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
