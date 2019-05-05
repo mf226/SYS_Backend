@@ -5,6 +5,66 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Hi Jesper, please make this page pretty some day, I pay in crypto!</h1>
+        <div>
+            <h3>Test your connection to the API</h3>
+            <p>Call: <a href="https://fenonline.dk/SYS_Backend/api/car/test">https://fenonline.dk/SYS_Backend/api/car/test</a><br>Respond: You are connected</p>
+            <p>If you get the correct respond from our API with this call, you should be good to go with the rest of the API.</p>
+            <h3>Get all cars</h3>
+            <p>Call: <a href="https://www.fenonline.dk/SYS_Backend/api/car/all">https://www.fenonline.dk/SYS_Backend/api/car/all</a><br>JSON:</p>
+            <p>[{<br>
+                "regno": "AB19406",<br>
+                "price": 247.72,<br>
+                "manufactor": "Toyota",<br>
+                "model": "C-HR",<br>
+                "type": "SUV",<br>
+                "releaseYear": 2011,<br>
+                "drivingDist": 37553,<br>
+                "seats": 5,<br>
+                "drive": "Manual",<br>
+                "fuelType": "Gas",<br>
+                "longitude": "12.6509822",<br>
+                "latitude": "55.6091282",<br>
+                "address": "Copenhagen Airport, Tårnby Kommune, Denmark",<br>
+                "country": "Jordan",<br>
+                "company": "dueinator"<br>
+                },<br>
+                {<br>
+                "regno": "AI95295",<br>
+                "price": 339.87,<br>
+                "manufactor": "Audi",<br>
+                "model": "A7",<br>
+                "type": "Sedan",<br>
+                "releaseYear": 2014,<br>
+                "drivingDist": 63506,<br>
+                "seats": 5,<br>
+                "drive": "Manual",<br>
+                "fuelType": "Gas",<br>
+                "longitude": "13.371700000000033",<br>
+                "latitude": "55.5355",<br>
+                "address": "Malmö Airport, Skåne län, Sweden",<br>
+                "country": "Georgia",<br>
+                "company": "dueinator"<br>
+                }]</p>
+            <h3>Get car by registration number</h3>
+            <p>Call: <a href="http://www.fenonline.dk/SYS_Backend/AI95295/dueinator">https://dueinator.dk/jwtbackend/api/car/{regno}/{company}</a><br>JSON:</p>
+            <p>{<br>
+                "regno": "AI95295",<br>
+                "price": 339.87,<br>
+                "manufactor": "Audi",<br>
+                "model": "A7",<br>
+                "type": "Sedan",<br>
+                "releaseYear": 2014,<br>
+                "drivingDist": 63506,<br>
+                "seats": 5,<br>
+                "drive": "Manual",<br>
+                "fuelType": "Gas",<br>
+                "longitude": "13.371700000000033",<br>
+                "latitude": "55.5355",<br>
+                "address": "Malmö Airport, Skåne län, Sweden",<br>
+                "country": "Georgia",<br>
+                "company": "dueinator"<br>
+                }</p>
+        </div>
     </body>
 </html>

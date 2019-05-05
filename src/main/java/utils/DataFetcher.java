@@ -32,11 +32,7 @@ public class DataFetcher {
 
     public DataFetcher() {
         companies = new ArrayList<>();
-        try {
-            companies.add(new Company("dueinator",new URL("https://www.dueinator.dk/jwtbackend/api/car/all")));
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(DataFetcher.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        companies.add(new Company("dueinator", "https://www.dueinator.dk/jwtbackend/api/car/"));
     }
 
     class FetchCars implements Callable<String> {
@@ -68,10 +64,24 @@ public class DataFetcher {
 //        }
 //        executor.shutdown();
 //        return results;
-//    }
+//    
+    public CarDTO getSpecificCar(String regno, String company) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(companies.indexOf(new Company(company, ""))).getUrl().concat(regno)).openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+        con.setRequestProperty("User-Agent", "server");
+        
+        JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        try {
+            return readMessageObject(reader, company);
+        } finally {
+            reader.close();
+        }
+    }
+
     public List<CarDTO> getAllCarsFromOneAPI() throws MalformedURLException, IOException {
         //URL url = new URL("https://www.swapi.co/api/people/" + id);
-        HttpURLConnection con = (HttpURLConnection) companies.get(0).getUrl().openConnection();
+        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(0).getUrl().concat("/all")).openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("User-Agent", "server");
@@ -111,6 +121,16 @@ public class DataFetcher {
         }
         reader.endArray();
         return cars;
+    }
+    
+    public CarDTO readMessageObject(JsonReader reader, String company) throws IOException {
+        CarDTO car = null;
+        //reader.beginObject();
+        if (reader.hasNext()) {
+            car = readMessage(reader, company);
+        }
+        //reader.endObject();
+        return car;
     }
 
     public CarDTO readMessage(JsonReader reader, String company) throws IOException {
