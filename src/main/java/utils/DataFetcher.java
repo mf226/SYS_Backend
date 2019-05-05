@@ -70,13 +70,23 @@ public class DataFetcher {
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("User-Agent", "server");
-        
+
         JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         try {
             return readMessageObject(reader, company);
         } finally {
             reader.close();
         }
+    }
+
+    public List<CarDTO> getAllAvailableCars(String start, String end) throws MalformedURLException, IOException {
+        String urlParamaters = "/available/" + start + "/" + end;
+        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(0).getUrl().concat(urlParamaters)).openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+        con.setRequestProperty("User-Agent", "server");
+
+        return readJsonStream(con.getInputStream(), companies.get(0).getName());
     }
 
     public List<CarDTO> getAllCarsFromOneAPI() throws MalformedURLException, IOException {
@@ -122,7 +132,7 @@ public class DataFetcher {
         reader.endArray();
         return cars;
     }
-    
+
     public CarDTO readMessageObject(JsonReader reader, String company) throws IOException {
         CarDTO car = null;
         //reader.beginObject();

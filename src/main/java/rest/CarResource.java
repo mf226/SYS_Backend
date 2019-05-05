@@ -88,6 +88,22 @@ public class CarResource {
         }
 
     }
+    
+        @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/available/{start}/{end}")
+    public Response getAllAvailableCars(@PathParam("regno") String start, @PathParam("company") String end) {
+        DataFetcher df = new DataFetcher();
+        //List<CarDTO> allCars = DataFetcher;
+        List<CarDTO> allCars;
+        try {
+            allCars = df.getAllAvailableCars(start, end);
+            return Response.ok().entity(gson.toJson(allCars)).build();
+        } catch (Exception ex) {
+            return Response.serverError().build();
+        }
+
+    }
 
     /**
      * PUT method for updating or creating an instance of CarResource
