@@ -21,7 +21,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import utils.DataFetcher;
+import facade.DataFetcher;
 import utils.PuSelector;
 
 /**
@@ -81,10 +81,10 @@ public class CarResource {
         //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;
         try {
-            allCars = df.getAllCarsFromOneAPI();
+            allCars = df.getAllCarsAllAPIs();
             return Response.ok().entity(gson.toJson(allCars)).build();
         } catch (Exception ex) {
-            return Response.serverError().build();
+            return gem.toResponse(ex);
         }
 
     }
@@ -97,10 +97,10 @@ public class CarResource {
         //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;
         try {
-            allCars = df.getAllAvailableCars(start, end);
+            allCars = df.getAllAvailableCarsAllAPIs(start, end);
             return Response.ok().entity(gson.toJson(allCars)).build();
         } catch (Exception ex) {
-            return Response.serverError().build();
+            return gem.toResponse(ex);
         }
 
     }

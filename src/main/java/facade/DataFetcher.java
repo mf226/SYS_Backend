@@ -1,5 +1,6 @@
-package utils;
+package facade;
 
+import exceptions.APIErrorException;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import dto.CarDTO;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -28,43 +30,41 @@ import java.util.logging.Logger;
  */
 public class DataFetcher {
 
-    public List<Company> companies;
+    class FetchCars implements Callable<List<CarDTO>> {
+
+        String url;
+        String start, end;
+
+        FetchCars(String url) {
+            this.url = url;
+            this.start = null;
+            this.end = null;
+        }
+
+        FetchCars(String url, String start, String end) {
+            this.url = url;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public List<CarDTO> call() throws Exception {
+            DataFetcher df = new DataFetcher();
+            if (start != null && end != null) {
+                return df.getAllAvailableCarsFromOneAPI(url, start, end);
+            }
+            return df.getAllCarsFromOneAPI(url);
+        }
+    }
+
+    private List<Company> companies;
 
     public DataFetcher() {
         companies = new ArrayList<>();
         companies.add(new Company("dueinator", "https://www.dueinator.dk/jwtbackend/api/car/"));
+        //Add more companies here to add them to the list of API calls.
     }
 
-    class FetchCars implements Callable<String> {
-
-        URL url;
-
-        FetchCars(URL url) {
-            this.url = url;
-        }
-
-        @Override
-        public String call() throws Exception {
-            return "gg";
-        }
-    }
-
-//    public List<String> getSeveralSwappiData() throws Exception {
-//        ExecutorService executor = Executors.newCachedThreadPool();
-//        List<Future<String>> futures = new ArrayList<>();
-//        for(int i = 1; i <= 5; i++) {
-//            FetchSWAPI fs = new FetchSWAPI(i);
-//            Future future = executor.submit(fs);
-//            futures.add(future);
-//        }
-//        List<String> results = new ArrayList();
-//        for(Future<String> f: futures) {
-//            String status =  f.get(5, TimeUnit.SECONDS);
-//            results.add(status);
-//        }
-//        executor.shutdown();
-//        return results;
-//    
     public CarDTO getSpecificCar(String regno, String company) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(companies.get(companies.indexOf(new Company(company, ""))).getUrl().concat(regno)).openConnection();
         con.setRequestMethod("GET");
@@ -79,9 +79,52 @@ public class DataFetcher {
         }
     }
 
-    public List<CarDTO> getAllAvailableCars(String start, String end) throws MalformedURLException, IOException {
+    public List<CarDTO> getAllCarsAllAPIs() throws Exception {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        List<Future<List<CarDTO>>> futures = new ArrayList<>();
+        for (Company c : companies) {
+            FetchCars fs = new FetchCars(c.getUrl());
+            Future future = executor.submit(fs);
+            futures.add(future);
+        }
+        List<CarDTO> results = new ArrayList();
+        for (Future<List<CarDTO>> f : futures) {
+            List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
+            results.addAll(list);
+        }
+        executor.shutdown();
+        return results;
+    }
+
+    public List<CarDTO> getAllAvailableCarsAllAPIs(String start, String end) throws Exception {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        List<Future<List<CarDTO>>> futures = new ArrayList<>();
+        for (Company c : companies) {
+            FetchCars fs = new FetchCars(c.getUrl(), start, end);
+            Future future = executor.submit(fs);
+            futures.add(future);
+        }
+        List<CarDTO> results = new ArrayList();
+        for (Future<List<CarDTO>> f : futures) {
+            List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
+            results.addAll(list);
+        }
+        executor.shutdown();
+        return results;
+    }
+
+    private List<CarDTO> getAllAvailableCarsFromOneAPI(String url, String start, String end) throws APIErrorException, MalformedURLException, IOException {
         String urlParamaters = "available/" + start + "/" + end;
-        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(0).getUrl().concat(urlParamaters)).openConnection();
+        HttpURLConnection con = (HttpURLConnection) new URL(url.concat(urlParamaters)).openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+        con.setRequestProperty("User-Agent", "server");
+        return readJsonStream(con.getInputStream(), companies.get(0).getName());
+
+    }
+
+    private List<CarDTO> getAllCarsFromOneAPI(String URL) throws MalformedURLException, IOException {
+        HttpURLConnection con = (HttpURLConnection) new URL(URL.concat("all")).openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("User-Agent", "server");
@@ -89,31 +132,7 @@ public class DataFetcher {
         return readJsonStream(con.getInputStream(), companies.get(0).getName());
     }
 
-    public List<CarDTO> getAllCarsFromOneAPI() throws MalformedURLException, IOException {
-        //URL url = new URL("https://www.swapi.co/api/people/" + id);
-        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(0).getUrl().concat("/all")).openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        con.setRequestProperty("User-Agent", "server");
-
-        return readJsonStream(con.getInputStream(), companies.get(0).getName());
-//        Gson gson = new Gson();
-//        JsonReader newJsonReader = gson.newJsonReader(new InputStreamReader(con.getInputStream()));
-//        //Scanner scan = new Scanner(con.getInputStream());
-//        //StringBuilder sb = new StringBuilder();
-//        String jsonStr = null;
-//        ArrayList<CarDTO> jsonarray = new ArrayList<>();
-//        if (newJsonReader.hasNext()) {
-//            //jsonStr = scan.nextLine();
-//            newJsonReader.beginArray();
-//            //jsonarray.add(newJsonReader.)
-//        }
-//        System.out.println(jsonStr);
-//        //scan.close();
-//        return jsonStr;
-    }
-
-    public List<CarDTO> readJsonStream(InputStream in, String company) throws IOException {
+    private List<CarDTO> readJsonStream(InputStream in, String company) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
             return readMessagesArray(reader, company);
@@ -122,7 +141,7 @@ public class DataFetcher {
         }
     }
 
-    public List<CarDTO> readMessagesArray(JsonReader reader, String company) throws IOException {
+    private List<CarDTO> readMessagesArray(JsonReader reader, String company) throws IOException {
         List<CarDTO> cars = new ArrayList<>();
 
         reader.beginArray();
@@ -133,7 +152,7 @@ public class DataFetcher {
         return cars;
     }
 
-    public CarDTO readMessageObject(JsonReader reader, String company) throws IOException {
+    private CarDTO readMessageObject(JsonReader reader, String company) throws IOException {
         CarDTO car = null;
         //reader.beginObject();
         if (reader.hasNext()) {
@@ -143,7 +162,7 @@ public class DataFetcher {
         return car;
     }
 
-    public CarDTO readMessage(JsonReader reader, String company) throws IOException {
+    private CarDTO readMessage(JsonReader reader, String company) throws IOException {
         String regno = null;
         double price = 0;
         String manufactor = null;
