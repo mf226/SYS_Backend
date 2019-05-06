@@ -1,0 +1,116 @@
+html {
+    scroll-behavior: smooth;
+}
+body {
+    margin: 0;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    font-family: 'Roboto';
+    background-color: #1a1a1a;
+    background-image: url("../Assets/Images/highway.png");
+    /* this breaks position sticky in Firefox */
+    /* overflow-x: hidden; */
+}
+header {
+    grid-column: 1 / 3;
+    background: #252E39;
+    background-image: linear-gradient(to right bottom, #000000, #371a1e, #6a2c2d, #9e4232, #cd612d, #cd612d, #cd612d, #cd612d, #9e4232, #6a2c2d, #371a1e, #000000);
+    image-resolution: 1200x1400;
+    text-align: center;
+    font-family: 'Chivo';
+    font-size: 22px;
+
+}
+header h1 {
+    color: #ff9933;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 7%;
+}
+header div {
+    border-top: #252E39 2px outset;
+    border-bottom: #252E39 2px solid;
+    height: 100%;
+    width: 100%;
+    background-image: url("../Assets/Images/headerImage.png");
+}
+nav {
+    white-space: nowrap;
+    background: black;
+    border-right: #252E39 solid 2px;
+    border-bottom: #252E39 solid 2px;
+}
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+/* Only stick if you can fit */
+@media (min-height: 300px) {
+    nav ul {
+        position: sticky;
+        top: 0;
+    }
+}
+nav ul li {
+    border-bottom: 1px solid #252E39;
+}
+nav ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ffb366;
+    font-size: 20px;
+    text-decoration: none;
+}
+nav ul li a.current {
+    background: #404040;
+}
+a {
+    color: black;
+    text-decoration: none;
+}
+main a {
+    display: inline-block;
+    padding-bottom: 20px;
+}
+a:hover {
+    color: #6B7B83;
+    text-decoration: underline;
+}
+a:active {
+    color: #6B7B83;
+}
+main {
+    padding-top: -30px;
+    border-bottom: #252E39 solid 2px;
+}
+section {
+    padding: 3rem;
+    display: flex;
+}
+.container {
+    width: 90%; 
+    height: 100%;
+    float: left;
+    display: inline-block;
+    flex-wrap: wrap;
+    font-family: 'Alegreya Sans', sans-serif;
+}
+.control-group {
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: top;
+    background: #a6a6a6;
+    text-align: left;
+    box-shadow: 0px 1px 2px rgba(0.2, 0.2, 0, 0.2);
+    padding: 10px 30px;
+    width: 100%;
+    height: 100%;
+    margin: 1%;
+    align-items: center;
+    opacity: 0.95;
+}
+footer {
+    grid-column: 1 / 3;
+    background: #252E39;
+    padding: 5rem 1rem;
+}
