@@ -1,26 +1,24 @@
 package facade;
 
 import exceptions.APIErrorException;
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import dto.CarDTO;
 import entity.Company;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,24 +60,36 @@ public class DataFetcher {
     public DataFetcher() {
         companies = new ArrayList<>();
         companies.add(new Company("dueinator", "https://www.dueinator.dk/jwtbackend/api/car/"));
+
         //Add more companies here to add them to the list of API calls.
     }
 
-    public CarDTO getSpecificCar(String regno, String company) throws IOException {
-        HttpURLConnection con = (HttpURLConnection) new URL(companies.get(companies.indexOf(new Company(company, ""))).getUrl().concat(regno)).openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        con.setRequestProperty("User-Agent", "server");
+    public CarDTO getSpecificCar(String regno, String company) throws APIErrorException {
 
-        JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         try {
-            return readMessageObject(reader, company);
-        } finally {
-            reader.close();
+            String url = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
+            HttpURLConnection con = (HttpURLConnection) new URL(url.concat(regno)).openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.setRequestProperty("User-Agent", "server");
+            if(con.getResponseCode() != 200) {
+                throw new APIErrorException(con.getResponseMessage());
+            }
+
+            JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            try {
+                return readMessageObject(reader, company);
+            } finally {
+                reader.close();
+            }
+        } catch (IndexOutOfBoundsException ex) {
+            throw new APIErrorException("Company name doesn't exist");
+        } catch (IOException ey) {
+            throw new APIErrorException(ey.getMessage());
         }
     }
 
-    public List<CarDTO> getAllCarsAllAPIs() throws Exception {
+    public List<CarDTO> getAllCarsAllAPIs() throws APIErrorException {
         ExecutorService executor = Executors.newCachedThreadPool();
         List<Future<List<CarDTO>>> futures = new ArrayList<>();
         for (Company c : companies) {
@@ -89,14 +99,22 @@ public class DataFetcher {
         }
         List<CarDTO> results = new ArrayList();
         for (Future<List<CarDTO>> f : futures) {
-            List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
-            results.addAll(list);
+            try {
+                List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
+                results.addAll(list);
+            } catch (ExecutionException ex) {
+                throw new APIErrorException(ex.getMessage());
+            } catch (InterruptedException ex) {
+                throw new APIErrorException("Interrupted");
+            } catch (TimeoutException ex) {
+                throw new APIErrorException("Timeout");
+            }
         }
         executor.shutdown();
         return results;
     }
 
-    public List<CarDTO> getAllAvailableCarsAllAPIs(String start, String end) throws Exception {
+    public List<CarDTO> getAllAvailableCarsAllAPIs(String start, String end) throws APIErrorException {
         ExecutorService executor = Executors.newCachedThreadPool();
         List<Future<List<CarDTO>>> futures = new ArrayList<>();
         for (Company c : companies) {
@@ -106,30 +124,50 @@ public class DataFetcher {
         }
         List<CarDTO> results = new ArrayList();
         for (Future<List<CarDTO>> f : futures) {
-            List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
-            results.addAll(list);
+            try {
+                List<CarDTO> list = f.get(5, TimeUnit.SECONDS);
+                results.addAll(list);
+            } catch (ExecutionException ex) {
+                throw new APIErrorException(ex.getMessage());
+            } catch (InterruptedException ex) {
+                throw new APIErrorException("Interrupted");
+            } catch (TimeoutException ex) {
+                throw new APIErrorException("Timeout");
+            }
         }
         executor.shutdown();
         return results;
     }
 
-    private List<CarDTO> getAllAvailableCarsFromOneAPI(String url, String start, String end) throws APIErrorException, MalformedURLException, IOException {
-        String urlParamaters = "available/" + start + "/" + end;
-        HttpURLConnection con = (HttpURLConnection) new URL(url.concat(urlParamaters)).openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        con.setRequestProperty("User-Agent", "server");
-        return readJsonStream(con.getInputStream(), companies.get(0).getName());
+    private List<CarDTO> getAllAvailableCarsFromOneAPI(String url, String start, String end) throws APIErrorException {
+        try {
+            String urlParamaters = "available/" + start + "/" + end;
+            HttpURLConnection con = (HttpURLConnection) new URL(url.concat(urlParamaters)).openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.setRequestProperty("User-Agent", "server");
+            return readJsonStream(con.getInputStream(), companies.get(0).getName());
+        } catch (MalformedURLException ex) {
+            throw new APIErrorException("Something wrong with the URL");
+        } catch (IOException ex) {
+            throw new APIErrorException(ex.getMessage());
+        }
 
     }
 
-    private List<CarDTO> getAllCarsFromOneAPI(String URL) throws MalformedURLException, IOException {
-        HttpURLConnection con = (HttpURLConnection) new URL(URL.concat("all")).openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-        con.setRequestProperty("User-Agent", "server");
+    private List<CarDTO> getAllCarsFromOneAPI(String URL) throws APIErrorException {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(URL.concat("all")).openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.setRequestProperty("User-Agent", "server");
 
-        return readJsonStream(con.getInputStream(), companies.get(0).getName());
+            return readJsonStream(con.getInputStream(), companies.get(0).getName());
+        } catch (MalformedURLException ex) {
+            throw new APIErrorException("Something wrong with the URL");
+        } catch (IOException ex) {
+            throw new APIErrorException(ex.getMessage());
+        }
     }
 
     private List<CarDTO> readJsonStream(InputStream in, String company) throws IOException {
