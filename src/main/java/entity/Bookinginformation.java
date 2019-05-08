@@ -31,7 +31,6 @@ import javax.validation.constraints.Size;
     , @NamedQuery(name = "Bookinginformation.findByEndPeriod", query = "SELECT b FROM Bookinginformation b WHERE b.endPeriod = :endPeriod")
     , @NamedQuery(name = "Bookinginformation.findByCreated", query = "SELECT b FROM Bookinginformation b WHERE b.created = :created")
     , @NamedQuery(name = "Bookinginformation.findByPrice", query = "SELECT b FROM Bookinginformation b WHERE b.price = :price")
-    , @NamedQuery(name = "Bookinginformation.findByCarRefUrl", query = "SELECT b FROM Bookinginformation b WHERE b.carRefUrl = :carRefUrl")
     , @NamedQuery(name = "Bookinginformation.findByCarRegNo", query = "SELECT b FROM Bookinginformation b WHERE b.carRegNo = :carRegNo")
     , @NamedQuery(name = "Bookinginformation.findByManufactor", query = "SELECT b FROM Bookinginformation b WHERE b.manufactor = :manufactor")
     , @NamedQuery(name = "Bookinginformation.findByModel", query = "SELECT b FROM Bookinginformation b WHERE b.model = :model")
@@ -51,13 +50,13 @@ public class Bookinginformation implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "startPeriod", nullable = false, length = 45)
+    @Column(name = "startPeriod", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date startPeriod;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "endPeriod", nullable = false, length = 45)
+    @Column(name = "endPeriod", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date endPeriod;
     @Basic(optional = false)
     @NotNull

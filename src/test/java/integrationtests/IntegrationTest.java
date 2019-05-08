@@ -22,7 +22,7 @@ public class IntegrationTest {
   protected static String SERVER_URL;
 
   public IntegrationTest() {
-      PuSelector.getEntityManagerFactory("pu_integration_test");
+      
   }
 
   private static EmbeddedTomcat tomcat;
@@ -30,6 +30,7 @@ public class IntegrationTest {
   @BeforeClass
   public static void setUpBeforeAll() throws ServletException, MalformedURLException, LifecycleException {
     System.out.println("INTEGRATION TEST");
+    PuSelector.getEntityManagerFactory("pu_integration_test");
     SERVER_PORT = 7777;
     APP_CONTEXT = "/jwtbackend";
     SERVER_URL = "http://localhost";
@@ -119,7 +120,7 @@ public class IntegrationTest {
     given()
             .contentType("application/json")
             .when()
-            .get("/api/car/AB19406/dueinator").then()
+            .get("/api/car/AJ65365/dueinator").then()
             .statusCode(200)
             ;
   }
