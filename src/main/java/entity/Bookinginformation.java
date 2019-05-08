@@ -53,12 +53,12 @@ public class Bookinginformation implements Serializable {
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "startPeriod", nullable = false, length = 45)
-    private String startPeriod;
+    private Date startPeriod;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "endPeriod", nullable = false, length = 45)
-    private String endPeriod;
+    private Date endPeriod;
     @Basic(optional = false)
     @NotNull
     @Column(name = "created", nullable = false)
@@ -70,14 +70,14 @@ public class Bookinginformation implements Serializable {
     private double price;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 200)
-    @Column(name = "car_ref_url", nullable = false, length = 200)
-    private String carRefUrl;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "carRegNo", nullable = false, length = 45)
     private String carRegNo;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "company", nullable = false, length = 45)
+    private String company;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -126,14 +126,14 @@ public class Bookinginformation implements Serializable {
         this.id = id;
     }
 
-    public Bookinginformation(Integer id, String startPeriod, String endPeriod, Date created, double price, String carRefUrl, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType) {
+    public Bookinginformation(Integer id, Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType) {
         this.id = id;
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
         this.created = created;
         this.price = price;
-        this.carRefUrl = carRefUrl;
         this.carRegNo = carRegNo;
+        this.company = company;
         this.manufactor = manufactor;
         this.model = model;
         this.type = type;
@@ -152,19 +152,19 @@ public class Bookinginformation implements Serializable {
         this.id = id;
     }
 
-    public String getStartPeriod() {
+    public Date getStartPeriod() {
         return startPeriod;
     }
 
-    public void setStartPeriod(String startPeriod) {
+    public void setStartPeriod(Date startPeriod) {
         this.startPeriod = startPeriod;
     }
 
-    public String getEndPeriod() {
+    public Date getEndPeriod() {
         return endPeriod;
     }
 
-    public void setEndPeriod(String endPeriod) {
+    public void setEndPeriod(Date endPeriod) {
         this.endPeriod = endPeriod;
     }
 
@@ -184,12 +184,12 @@ public class Bookinginformation implements Serializable {
         this.price = price;
     }
 
-    public String getCarRefUrl() {
-        return carRefUrl;
+    public String getCompany() {
+        return company;
     }
 
-    public void setCarRefUrl(String carRefUrl) {
-        this.carRefUrl = carRefUrl;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getCarRegNo() {

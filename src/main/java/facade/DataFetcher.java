@@ -2,8 +2,9 @@ package facade;
 
 import exceptions.APIErrorException;
 import com.google.gson.stream.JsonReader;
+import dto.BookinginformationDTO;
 import dto.CarDTO;
-import entity.Company;
+import dto.Company;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,6 +65,44 @@ public class DataFetcher {
         //Add more companies here to add them to the list of API calls.
     }
 
+    public BookinginformationDTO rentCar(String company, String regno, String start, String end) throws APIErrorException {
+        BookinginformationDTO dto;
+        switch (company) {
+            case "dueinator":
+                String baseURL = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
+                String url = baseURL + regno + "/" + start + "/" + end;
+                dto = postRentCarToAPI(url, company);
+                break;
+//            case "ttt":
+//                price = reader.nextDouble();
+//                break;
+            default:
+                throw new APIErrorException("Company doesn't exist");
+        }
+        return dto;
+    }
+
+    private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.setRequestProperty("User-Agent", "server");
+            if (con.getResponseCode() != 200) {
+                throw new APIErrorException(con.getResponseMessage());
+            }
+
+            JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            try {
+                return readMessageObjectBooking(reader, company);
+            } finally {
+                reader.close();
+            }
+        } catch (IOException ey) {
+            throw new APIErrorException(ey.getMessage());
+        }
+    }
+
     public CarDTO getSpecificCar(String regno, String company) throws APIErrorException {
 
         try {
@@ -72,13 +111,13 @@ public class DataFetcher {
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json;charset=UTF-8");
             con.setRequestProperty("User-Agent", "server");
-            if(con.getResponseCode() != 200) {
+            if (con.getResponseCode() != 200) {
                 throw new APIErrorException(con.getResponseMessage());
             }
 
             JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             try {
-                return readMessageObject(reader, company);
+                return readMessageObjectCar(reader, company);
             } finally {
                 reader.close();
             }
@@ -184,23 +223,23 @@ public class DataFetcher {
 
         reader.beginArray();
         while (reader.hasNext()) {
-            cars.add(readMessage(reader, company));
+            cars.add(readMessageCar(reader, company));
         }
         reader.endArray();
         return cars;
     }
 
-    private CarDTO readMessageObject(JsonReader reader, String company) throws IOException {
+    private CarDTO readMessageObjectCar(JsonReader reader, String company) throws IOException {
         CarDTO car = null;
         //reader.beginObject();
         if (reader.hasNext()) {
-            car = readMessage(reader, company);
+            car = readMessageCar(reader, company);
         }
         //reader.endObject();
         return car;
     }
 
-    private CarDTO readMessage(JsonReader reader, String company) throws IOException {
+    private CarDTO readMessageCar(JsonReader reader, String company) throws IOException {
         String regno = null;
         double price = 0;
         String manufactor = null;
@@ -271,5 +310,78 @@ public class DataFetcher {
         return new CarDTO(regno, price, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address, country, company);
     }
 
-    //regno, price, manufactor, model, address
+    private BookinginformationDTO readMessageObjectBooking(JsonReader reader, String company) throws IOException {
+        BookinginformationDTO dto = null;
+        //reader.beginObject();
+        if (reader.hasNext()) {
+            dto = readMessageBooking(reader, company);
+        }
+        //reader.endObject();
+        return dto;
+    }
+
+    private BookinginformationDTO readMessageBooking(JsonReader reader, String company) throws IOException {
+
+        String startPeriod;
+        String endPeriod;
+        String created;
+        double price;
+        CarDTO car;
+        String userName;
+
+//        reader.beginObject();
+//        while (reader.hasNext()) {
+//            String name = reader.nextName();
+//            switch (name) {
+//                case "startPeriod":
+//                    regno = reader.nextString();
+//                    break;
+//                case "price":
+//                    price = reader.nextDouble();
+//                    break;
+//                case "manufactor":
+//                    manufactor = reader.nextString();
+//                    break;
+//                case "model":
+//                    model = reader.nextString();
+//                    break;
+//                case "type":
+//                    type = reader.nextString();
+//                    break;
+//                case "releaseYear":
+//                    releaseYear = reader.nextInt();
+//                    break;
+//                case "drivingDist":
+//                    drivingDist = reader.nextInt();
+//                    break;
+//                case "seats":
+//                    seats = reader.nextInt();
+//                    break;
+//                case "drive":
+//                    drive = reader.nextString();
+//                    break;
+//                case "fuelType":
+//                    fuelType = reader.nextString();
+//                    break;
+//                case "longitude":
+//                    longitude = reader.nextString();
+//                    break;
+//                case "latitude":
+//                    latitude = reader.nextString();
+//                    break;
+//                case "address":
+//                    address = reader.nextString();
+//                    break;
+//                case "country":
+//                    country = reader.nextString();
+//                    break;
+//                default:
+//                    reader.skipValue();
+//                    break;
+//            }
+//        }
+//        reader.endObject();
+
+        return null;
+    }
 }

@@ -1,6 +1,5 @@
-package entity;
+package dto;
 
-import java.net.URL;
 import java.util.Objects;
 
 /**

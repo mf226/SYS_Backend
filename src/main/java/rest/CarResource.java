@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.BookinginformationDTO;
 import dto.CarDTO;
 import exceptions.GenericExceptionMapper;
 import facade.CarFacade;
@@ -22,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import facade.DataFetcher;
+import javax.ws.rs.POST;
 import utils.PuSelector;
 
 /**
@@ -45,16 +47,10 @@ public class CarResource {
     public CarResource() {
     }
 
-    /**
-     * Retrieves representation of an instance of rest.CarResource
-     *
-     * @return an instance of java.lang.String
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/test")
     public Response test() {
-        //TODO return proper representation object
         return Response.ok().entity(gson.toJson("You are connected")).build();
     }
 
@@ -105,13 +101,18 @@ public class CarResource {
 
     }
 
-    /**
-     * PUT method for updating or creating an instance of CarResource
-     *
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/rent/{company}/{regno}/{start}/{end}")
+    public Response rentAvailableCar(@PathParam("company") String company, @PathParam("regno") String regno, @PathParam("start") String start, @PathParam("end") String end) {
+        DataFetcher df = new DataFetcher();
+        //List<CarDTO> allCars = DataFetcher;
+        BookinginformationDTO dto;
+        try {
+            dto = df.rentCar(company, regno, start, end);
+            return Response.ok().entity(gson.toJson(dto)).build();
+        } catch (Exception ex) {
+            return gem.toResponse(ex);
+        }
     }
 }
