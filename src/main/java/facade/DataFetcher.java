@@ -5,13 +5,18 @@ import com.google.gson.stream.JsonReader;
 import dto.BookinginformationDTO;
 import dto.CarDTO;
 import dto.Company;
+import entity.Bookinginformation;
+import entity.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -83,21 +88,24 @@ public class DataFetcher {
     }
 
     private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException {
+        Bookinginformation booking;
         try {
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-            con.setRequestMethod("POST");
+            con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json;charset=UTF-8");
             con.setRequestProperty("User-Agent", "server");
             if (con.getResponseCode() != 200) {
-                throw new APIErrorException(con.getResponseMessage());
+                throw new APIErrorException("WHATUP BITCH");
             }
 
             JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             try {
-                return readMessageObjectBooking(reader, company);
+                booking = readMessageObjectBooking(reader, company);
             } finally {
                 reader.close();
             }
+            //facade.persistbooking(booking);
+            return new BookinginformationDTO(booking);
         } catch (IOException ey) {
             throw new APIErrorException(ey.getMessage());
         }
@@ -310,78 +318,79 @@ public class DataFetcher {
         return new CarDTO(regno, price, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address, country, company);
     }
 
-    private BookinginformationDTO readMessageObjectBooking(JsonReader reader, String company) throws IOException {
-        BookinginformationDTO dto = null;
+    private Bookinginformation readMessageObjectBooking(JsonReader reader, String company) throws IOException, APIErrorException {
+        Bookinginformation booking = null;
         //reader.beginObject();
         if (reader.hasNext()) {
-            dto = readMessageBooking(reader, company);
+            try {
+                booking = readMessageBooking(reader, company);
+            } catch (ParseException ex) {
+                throw new APIErrorException("Something went wrong while parsing the dates");
+            }
         }
         //reader.endObject();
-        return dto;
+        return booking;
     }
 
-    private BookinginformationDTO readMessageBooking(JsonReader reader, String company) throws IOException {
-
-        String startPeriod;
-        String endPeriod;
-        String created;
-        double price;
-        CarDTO car;
-        String userName;
-
-//        reader.beginObject();
-//        while (reader.hasNext()) {
-//            String name = reader.nextName();
-//            switch (name) {
-//                case "startPeriod":
-//                    regno = reader.nextString();
-//                    break;
-//                case "price":
-//                    price = reader.nextDouble();
-//                    break;
-//                case "manufactor":
-//                    manufactor = reader.nextString();
-//                    break;
-//                case "model":
-//                    model = reader.nextString();
-//                    break;
-//                case "type":
-//                    type = reader.nextString();
-//                    break;
-//                case "releaseYear":
-//                    releaseYear = reader.nextInt();
-//                    break;
-//                case "drivingDist":
-//                    drivingDist = reader.nextInt();
-//                    break;
-//                case "seats":
-//                    seats = reader.nextInt();
-//                    break;
-//                case "drive":
-//                    drive = reader.nextString();
-//                    break;
-//                case "fuelType":
-//                    fuelType = reader.nextString();
-//                    break;
-//                case "longitude":
-//                    longitude = reader.nextString();
-//                    break;
-//                case "latitude":
-//                    latitude = reader.nextString();
-//                    break;
-//                case "address":
-//                    address = reader.nextString();
-//                    break;
-//                case "country":
-//                    country = reader.nextString();
-//                    break;
-//                default:
-//                    reader.skipValue();
-//                    break;
-//            }
-//        }
-//        reader.endObject();
-
-        return null;
+    private Bookinginformation readMessageBooking(JsonReader reader, String company) throws IOException, ParseException {
+        Date startPeriod = null;
+        Date endPeriod = null;
+        Date created = null;
+        double price = 0;
+        String regNo = null;
+        String manufactor = null;
+        String model = null;
+        String type = null;
+        int releaseYear = 0;
+        int drivingDist = 0;
+        int seats = 0;
+        String drive = null;
+        String fuelType = null;
+        User user = null;
+        String latitude = null;
+        String longitude = null;
+        String address = null;
+        
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+                case "startPeriod":
+                    String start = reader.nextString();
+                    startPeriod = sdf.parse(start);
+                    break;
+                case "endPeriod":
+                    String end = reader.nextString();
+                    endPeriod = sdf.parse(end);
+                    break;
+                case "created":
+                    String c = reader.nextString();
+                    created = sdf.parse(c);
+                    break;
+                case "price":
+                    price = reader.nextDouble();
+                    break;
+                case "car":
+                    CarDTO car = readMessageCar(reader, company);
+                    regNo = car.getRegno();
+                    manufactor = car.getManufactor();
+                    model = car.getModel();
+                    type = car.getType();
+                    releaseYear = car.getReleaseYear();
+                    drivingDist = car.getDrivingDist();
+                    seats = car.getSeats();
+                    drive = car.getDrive();
+                    fuelType = car.getFuelType();
+                    longitude = car.getLongitude();
+                    latitude = car.getLatitude();
+                    address = car.getAddress();
+                default:
+                    reader.skipValue();
+                    break;
+            }
+        }
+        reader.endObject();
+        return new Bookinginformation(startPeriod, endPeriod, created, price, company, regNo, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address);
     }
 }

@@ -117,16 +117,26 @@ public class Bookinginformation implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private User user;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
+    @Column(name = "longitude", nullable = false, length = 150)
+    private String longitude;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
+    @Column(name = "latitude", nullable = false, length = 150)
+    private String latitude;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "address", nullable = false, length = 45)
+    private String address;
 
     public Bookinginformation() {
     }
 
-    public Bookinginformation(Integer id) {
-        this.id = id;
-    }
-
-    public Bookinginformation(Integer id, Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType) {
-        this.id = id;
+    public Bookinginformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
         this.created = created;
@@ -141,6 +151,33 @@ public class Bookinginformation implements Serializable {
         this.seats = seats;
         this.drive = drive;
         this.fuelType = fuelType;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getId() {
@@ -295,5 +332,5 @@ public class Bookinginformation implements Serializable {
     public String toString() {
         return "entity.Bookinginformation[ id=" + id + " ]";
     }
-    
+
 }

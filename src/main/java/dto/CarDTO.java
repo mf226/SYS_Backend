@@ -1,5 +1,6 @@
 package dto;
 
+import entity.Bookinginformation;
 import java.util.Collection;
 
 public class CarDTO {
@@ -37,6 +38,23 @@ public class CarDTO {
         this.address = address;
         this.country = country;
         this.company = company;
+    }
+    public CarDTO(Bookinginformation booking) {
+        this.regno = booking.getCarRegNo();
+        //this.price = 0; Booking doesn't contain a dayprice
+        this.manufactor = booking.getManufactor();
+        this.model = booking.getModel();
+        this.type = booking.getType();
+        this.releaseYear = booking.getReleaseYear();
+        this.drivingDist = booking.getDrivingDist();
+        this.seats = booking.getSeats();
+        this.drive = booking.getDrive();
+        this.fuelType = booking.getFuelType();
+        this.longitude = booking.getLongitude();
+        this.latitude = booking.getLatitude();
+        this.address = booking.getAddress();
+        //this.country = country;
+        this.company = booking.getCompany();
     }
 
     public String getRegno() {

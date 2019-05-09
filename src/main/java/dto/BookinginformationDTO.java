@@ -1,5 +1,7 @@
 package dto;
 
+import entity.Bookinginformation;
+
 public class BookinginformationDTO {
 
     private int id;
@@ -18,8 +20,15 @@ public class BookinginformationDTO {
         this.car = car;
         this.userName = userName;
     }
-    
-    
+
+    public BookinginformationDTO(Bookinginformation booking) {
+        this.id = booking.getId();
+        this.startPeriod = booking.getStartPeriod().toString();
+        this.endPeriod = booking.getEndPeriod().toString();
+        this.created = booking.getCreated().toString();
+        this.price = booking.getPrice();
+        this.car = new CarDTO(booking);
+    }
 
     public int getId() {
         return id;
@@ -77,5 +86,4 @@ public class BookinginformationDTO {
         this.userName = userName;
     }
 
-    
 }
