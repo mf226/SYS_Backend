@@ -1,5 +1,6 @@
 package facade;
 
+import com.google.gson.Gson;
 import exceptions.APIErrorException;
 import com.google.gson.stream.JsonReader;
 import dto.BookinginformationDTO;
@@ -13,11 +14,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.PuSelector;
 
 /**
  *
@@ -75,7 +81,7 @@ public class DataFetcher {
         switch (company) {
             case "dueinator":
                 String baseURL = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
-                String url = baseURL + regno + "/" + start + "/" + end;
+                String url = baseURL + "rent/" + regno + "/" + start + "/" + end;
                 dto = postRentCarToAPI(url, company);
                 break;
 //            case "ttt":
@@ -90,12 +96,17 @@ public class DataFetcher {
     private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException {
         Bookinginformation booking;
         try {
+            System.out.println(url);
+            System.out.println(url);
+            System.out.println(url);
+            System.out.println(url);
+            System.out.println(url);
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json;charset=UTF-8");
             con.setRequestProperty("User-Agent", "server");
             if (con.getResponseCode() != 200) {
-                throw new APIErrorException("WHATUP BITCH");
+                throw new APIErrorException(con.getResponseMessage()+"whatupbitch!");
             }
 
             JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
@@ -104,8 +115,9 @@ public class DataFetcher {
             } finally {
                 reader.close();
             }
-            //facade.persistbooking(booking);
-            return new BookinginformationDTO(booking);
+            
+            return BookingFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).createBooking(booking);
+            //return new BookinginformationDTO(booking);
         } catch (IOException ey) {
             throw new APIErrorException(ey.getMessage());
         }
@@ -114,8 +126,8 @@ public class DataFetcher {
     public CarDTO getSpecificCar(String regno, String company) throws APIErrorException {
 
         try {
-            String url = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
-            HttpURLConnection con = (HttpURLConnection) new URL(url.concat(regno)).openConnection();
+            String url = companies.get(companies.indexOf(new Company(company, ""))).getUrl().concat(regno);
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json;charset=UTF-8");
             con.setRequestProperty("User-Agent", "server");
@@ -351,22 +363,58 @@ public class DataFetcher {
         String longitude = null;
         String address = null;
         
-        SimpleDateFormat sdf = new SimpleDateFormat();
+        Gson gson = new Gson();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
         reader.beginObject();
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
                 case "startPeriod":
                     String start = reader.nextString();
+                    System.out.println(start);
+                    System.out.println(start);
+                    System.out.println(start);
+                    System.out.println(start);
+                    System.out.println(start);
+                    System.out.println(start);
+                    //startPeriod = gson.fromJson(start, Date.class);
                     startPeriod = sdf.parse(start);
+                    System.out.println(startPeriod);
+                    System.out.println(startPeriod);
+                    System.out.println(startPeriod);
+                    System.out.println(startPeriod);
+                    System.out.println(startPeriod);
                     break;
                 case "endPeriod":
                     String end = reader.nextString();
+                    System.out.println(end);
+                    System.out.println(end);
+                    System.out.println(end);
+                    System.out.println(end);
+                    System.out.println(end);
+                    //endPeriod = gson.fromJson(end, Date.class);
                     endPeriod = sdf.parse(end);
+                    System.out.println(endPeriod);
+                    System.out.println(endPeriod);
+                    System.out.println(endPeriod);
+                    System.out.println(endPeriod);
+                    System.out.println(endPeriod);
                     break;
                 case "created":
                     String c = reader.nextString();
-                    created = sdf.parse(c);
+                    System.out.println(c);
+                    System.out.println(c);
+                    System.out.println(c);
+                    System.out.println(c);
+                    System.out.println(c);
+                    //created = gson.fromJson(c, Date.class);
+                    //created = sdf.parse(c);
+                    created = new Date();
+                    System.out.println(created);
+                    System.out.println(created);
+                    System.out.println(created);
+                    System.out.println(created);
+                    System.out.println(created);
                     break;
                 case "price":
                     price = reader.nextDouble();
@@ -385,6 +433,7 @@ public class DataFetcher {
                     longitude = car.getLongitude();
                     latitude = car.getLatitude();
                     address = car.getAddress();
+                    break;
                 default:
                     reader.skipValue();
                     break;
@@ -393,4 +442,15 @@ public class DataFetcher {
         reader.endObject();
         return new Bookinginformation(startPeriod, endPeriod, created, price, company, regNo, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address);
     }
+    
+//    private Date StringToDate(String date) throws ParseException { // Nov 1, 2019 10:00:00 AM
+//        String[] strings = date.split(" ");
+//        int year = Integer.parseInt(strings[2]);
+//        Date monthGetter = new SimpleDateFormat("MMM", Locale.ENGLISH).parse(strings[0]);
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(monthGetter);
+//        int month = cal.get(Calendar.MONTH);
+//        int day = Integer.parseInt(strings[1].replace(",", ""));
+//        
+//    }
 }

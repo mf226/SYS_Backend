@@ -114,7 +114,7 @@ public class Bookinginformation implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "fuelType", nullable = false, length = 45)
     private String fuelType;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
     @Basic(optional = false)
