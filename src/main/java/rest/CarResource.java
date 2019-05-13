@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import facade.DataFetcher;
 import javax.ws.rs.POST;
 import utils.PuSelector;
+import utils.SetupTestUsers;
 
 /**
  * REST Web Service
@@ -46,6 +47,7 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/test")
     public Response test() {
+        SetupTestUsers.createTestUsers();
         return Response.ok().entity(gson.toJson("You are connected")).build();
     }
 
