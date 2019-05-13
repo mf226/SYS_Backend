@@ -20,6 +20,7 @@ public class CarDTO {
     private String address;
     private String country;
     private String company;
+    private String userName;
     //private Collection<BookingInformationDTO> bookingInformationCollection;
 
     public CarDTO(String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country, String company) {
@@ -38,6 +39,26 @@ public class CarDTO {
         this.address = address;
         this.country = country;
         this.company = company;
+        userName = null;
+    }
+    
+    public CarDTO(String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country, String company, String userName) {
+        this.regno = regno;
+        this.price = price;
+        this.manufactor = manufactor;
+        this.model = model;
+        this.type = type;
+        this.releaseYear = releaseYear;
+        this.drivingDist = drivingDist;
+        this.seats = seats;
+        this.drive = drive;
+        this.fuelType = fuelType;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.address = address;
+        this.country = country;
+        this.company = company;
+        this.userName = userName;
     }
     public CarDTO(Bookinginformation booking) {
         this.regno = booking.getCarRegNo();
@@ -53,8 +74,16 @@ public class CarDTO {
         this.longitude = booking.getLongitude();
         this.latitude = booking.getLatitude();
         this.address = booking.getAddress();
-        //this.country = country;
+        //this.country = booking.;
         this.company = booking.getCompany();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getRegno() {

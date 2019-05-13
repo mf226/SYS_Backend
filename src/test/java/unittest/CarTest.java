@@ -49,7 +49,7 @@ public class CarTest {
     
     @Test
     public void getSpecificCar() throws Exception {
-        String regno = "AJ65365";
+        String regno = "AH07908";
         String company = "dueinator";
 
         CarDTO car = fetcher.getSpecificCar(regno, company);
@@ -58,7 +58,7 @@ public class CarTest {
     
     @Test(expected = APIErrorException.class)
     public void getSpecificCar2() throws Exception {
-        String regno = "AB19406";
+        String regno = "AH07908";
         String company = "WrongCompanyName";
 
         CarDTO car = fetcher.getSpecificCar(regno, company);

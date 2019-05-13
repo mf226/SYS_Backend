@@ -1,5 +1,6 @@
 package entity;
 
+import dto.CarDTO;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -104,7 +105,7 @@ public class Car implements Serializable {
     @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Country country;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name", nullable = false)
     @ManyToOne(optional = false)
     private User user;
 
@@ -129,6 +130,24 @@ public class Car implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.address = address;
+    }
+
+    public Car(CarDTO dto, Country country, User user) {
+        this.regno = dto.getRegno();
+        this.drivingDist = dto.getDrivingDist();
+        this.price = dto.getPrice();
+        this.manufactor = dto.getManufactor();
+        this.model = dto.getModel();
+        this.releaseYear = dto.getReleaseYear();
+        this.type = dto.getType();
+        this.drive = dto.getDrive();
+        this.fuelType = dto.getFuelType();
+        this.seats = dto.getSeats();
+        this.longitude = dto.getLongitude();
+        this.latitude = dto.getLatitude();
+        this.address = dto.getAddress();
+        this.country = country;
+        this.user = user;
     }
 
     public String getRegno() {
@@ -275,5 +294,5 @@ public class Car implements Serializable {
     public String toString() {
         return "entity.Car[ regno=" + regno + " ]";
     }
-    
+
 }

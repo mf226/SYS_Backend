@@ -6,12 +6,7 @@ import dto.BookinginformationDTO;
 import dto.CarDTO;
 import exceptions.GenericExceptionMapper;
 import facade.CarFacade;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -110,6 +105,22 @@ public class CarResource {
         BookinginformationDTO dto;
         try {
             dto = df.rentCar(company, regno, start, end);
+            return Response.ok().entity(gson.toJson(dto)).build();
+        } catch (Exception ex) {
+            return gem.toResponse(ex);
+        }
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/listMyCar")
+    public Response listOwnCar(String content) {
+        //DataFetcher df = new DataFetcher();
+        //List<CarDTO> allCars = DataFetcher;
+        CarDTO dto;
+        try {
+            dto = facade.listOwnCar(gson.fromJson(content, CarDTO.class));
             return Response.ok().entity(gson.toJson(dto)).build();
         } catch (Exception ex) {
             return gem.toResponse(ex);

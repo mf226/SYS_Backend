@@ -34,9 +34,10 @@ import org.mindrot.jbcrypt.BCrypt;
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"driverLicenseNumber"})
     , @UniqueConstraint(columnNames = {"email"})
-    , @UniqueConstraint(columnNames = {"id"})})
+    , @UniqueConstraint(columnNames = {"user_name"})})
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+    , @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName")
     , @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName")
     , @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName")
     , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
@@ -121,7 +122,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String userName, String userPass, String firstName, String lastName, String email, Date birth, String gender, String phone, String status, String driverLicenseNumber, Collection<Car> carCollection, Collection<Rating> ratingCollection, Collection<Bookinginformation> bookinginformationCollection) {
+    public User(String userName, String userPass, String firstName, String lastName, String email, Date birth, String gender, String phone, String status, String driverLicenseNumber) {
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
         this.firstName = firstName;
@@ -132,10 +133,8 @@ public class User implements Serializable {
         this.phone = phone;
         this.status = status;
         this.driverLicenseNumber = driverLicenseNumber;
-        this.carCollection = carCollection;
-        this.ratingCollection = ratingCollection;
-        this.bookinginformationCollection = bookinginformationCollection;
     }
+
 
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {

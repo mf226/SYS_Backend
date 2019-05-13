@@ -10,20 +10,21 @@ import utils.PuSelector;
  * @author lam@cphbusiness.dk
  */
 public class UserFacade {
-  
+
     private static EntityManagerFactory emf;
     private static UserFacade instance;
-    
-    private UserFacade(){}
-    
-    public static UserFacade getInstance(EntityManagerFactory factory){
-        if(instance == null){
-          emf = factory;
-          instance = new UserFacade();
+
+    private UserFacade() {
+    }
+
+    public static UserFacade getInstance(EntityManagerFactory factory) {
+        if (instance == null) {
+            emf = factory;
+            instance = new UserFacade();
         }
         return instance;
     }
-    
+
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
@@ -36,6 +37,15 @@ public class UserFacade {
             em.close();
         }
         return user;
+    }
+
+    public User getUserById(String userName) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createNamedQuery("User.findByUserName", User.class).setParameter("userName", userName).getSingleResult();
+        } finally {
+            em.close();
+        }
     }
 
 }

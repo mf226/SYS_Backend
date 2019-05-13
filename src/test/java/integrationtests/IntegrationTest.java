@@ -120,7 +120,7 @@ public class IntegrationTest {
     given()
             .contentType("application/json")
             .when()
-            .get("/api/car/AJ65365/dueinator").then()
+            .get("/api/car/AH07908/dueinator").then()
             .statusCode(200)
             ;
   }
