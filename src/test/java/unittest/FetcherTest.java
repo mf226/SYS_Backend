@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 import testutils.TestUtils;
 import utils.PuSelector;
 
-public class CarTest {
+public class FetcherTest {
 
     private static DataFetcher fetcher;
 
