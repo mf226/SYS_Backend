@@ -2,6 +2,7 @@ package facade;
 
 import dto.BookinginformationDTO;
 import entity.BookingInformation;
+import exceptions.FacadeException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,7 +12,7 @@ import javax.persistence.EntityManagerFactory;
  * @author Fen
  */
 public class BookingFacade {
-    
+
     private static EntityManagerFactory emf;
     private static BookingFacade instance;
 
@@ -33,17 +34,19 @@ public class BookingFacade {
         }
         return bookings;
     }
-    
-    public BookinginformationDTO createBooking(BookingInformation booking) {
+
+    public BookinginformationDTO createBooking(BookingInformation booking) throws FacadeException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(booking);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new FacadeException("Something went wrong while creating your order!");
         } finally {
             em.close();
         }
         return new BookinginformationDTO(booking);
     }
-    
+
 }

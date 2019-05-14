@@ -3,6 +3,7 @@ package testutils;
 import entity.BookingInformation;
 import entity.Car;
 import entity.Country;
+import entity.User;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -43,18 +44,23 @@ public class TestUtils {
             }
             //Get all cars to attach bookings
             List<Car> cars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
-            Collections.shuffle(cars); 
+            Collections.shuffle(cars);
+            //Create user
+            User user = new User("TTTxDDD", "360TTT42", "Turtle", "Trooper", "turtle@trooper.com", STD("1970-01-01"), "Demon", "+45 360 360 00", "Single *Sad Face*", "3603 6036 0360 3603");
+            em.persist(user);
             //Create bookings
             for (int i = 0; i < 2; i++) {
                 Car car = cars.get(i);
-                BookingInformation booking = new BookingInformation(STD("2019-05-05"), STD("2019-05-13"), new Date(), car.getPrice()*8, "Test", car.getRegno(), car.getManufactor(), car.getModel(), car.getType(), car.getReleaseYear(), car.getDrivingDist(), car.getSeats(), car.getDrive(), car.getFuelType(), car.getLongitude(), car.getLatitude(), car.getAddress());
+                BookingInformation booking = new BookingInformation(STD("2019-05-05"), STD("2019-05-13"), new Date(), car.getPrice() * 8, "Test", car.getRegno(), car.getManufactor(), car.getModel(), car.getType(), car.getReleaseYear(), car.getDrivingDist(), car.getSeats(), car.getDrive(), car.getFuelType(), car.getLongitude(), car.getLatitude(), car.getAddress());
+                booking.setUser(em.find(User.class, "TTTxDDDD"));
+                em.persist(booking);
             }
             System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } catch (ParseException ex) {
             System.out.println("------------------------------------------------");
             System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            System.out.println("ERROR-ERROR-ERROR-ERROR--ERROR-ERROR-ERROR-ERROR");
+            System.out.println(ex.getMessage());
             System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             System.out.println("------------------------------------------------");
         } finally {
