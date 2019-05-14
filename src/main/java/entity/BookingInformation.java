@@ -40,7 +40,7 @@ import javax.validation.constraints.Size;
     , @NamedQuery(name = "Bookinginformation.findBySeats", query = "SELECT b FROM Bookinginformation b WHERE b.seats = :seats")
     , @NamedQuery(name = "Bookinginformation.findByDrive", query = "SELECT b FROM Bookinginformation b WHERE b.drive = :drive")
     , @NamedQuery(name = "Bookinginformation.findByFuelType", query = "SELECT b FROM Bookinginformation b WHERE b.fuelType = :fuelType")})
-public class Bookinginformation implements Serializable {
+public class BookingInformation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -133,10 +133,10 @@ public class Bookinginformation implements Serializable {
     @Column(name = "address", nullable = false, length = 45)
     private String address;
 
-    public Bookinginformation() {
+    public BookingInformation() {
     }
 
-    public Bookinginformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
+    public BookingInformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
         this.created = created;
@@ -318,10 +318,10 @@ public class Bookinginformation implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Bookinginformation)) {
+        if (!(object instanceof BookingInformation)) {
             return false;
         }
-        Bookinginformation other = (Bookinginformation) object;
+        BookingInformation other = (BookingInformation) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

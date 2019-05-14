@@ -1,6 +1,6 @@
 package dto;
 
-import entity.Bookinginformation;
+import entity.BookingInformation;
 import java.util.Collection;
 
 public class CarDTO {
@@ -60,7 +60,7 @@ public class CarDTO {
         this.company = company;
         this.userName = userName;
     }
-    public CarDTO(Bookinginformation booking) {
+    public CarDTO(BookingInformation booking) {
         this.regno = booking.getCarRegNo();
         //this.price = 0; Booking doesn't contain a dayprice
         this.manufactor = booking.getManufactor();

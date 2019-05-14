@@ -1,8 +1,7 @@
 package facade;
 
 import dto.BookinginformationDTO;
-import entity.Bookinginformation;
-import java.util.ArrayList;
+import entity.BookingInformation;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,18 +23,18 @@ public class BookingFacade {
         return instance;
     }
 
-    public List<Bookinginformation> getAllBookings() {
+    public List<BookingInformation> getAllBookings() {
         EntityManager em = emf.createEntityManager();
-        List<Bookinginformation> bookings;
+        List<BookingInformation> bookings;
         try {
-            bookings = em.createNamedQuery("Car.findAll", Bookinginformation.class).getResultList();
+            bookings = em.createNamedQuery("Car.findAll", BookingInformation.class).getResultList();
         } finally {
             em.close();
         }
         return bookings;
     }
     
-    public BookinginformationDTO createBooking(Bookinginformation booking) {
+    public BookinginformationDTO createBooking(BookingInformation booking) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();

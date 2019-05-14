@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonReader;
 import dto.BookinginformationDTO;
 import dto.CarDTO;
 import dto.Company;
-import entity.Bookinginformation;
+import entity.BookingInformation;
 import entity.User;
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,7 +94,7 @@ public class DataFetcher {
     }
 
     private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException {
-        Bookinginformation booking;
+        BookingInformation booking;
         try {
             System.out.println(url);
             System.out.println(url);
@@ -330,8 +330,8 @@ public class DataFetcher {
         return new CarDTO(regno, price, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address, country, company);
     }
 
-    private Bookinginformation readMessageObjectBooking(JsonReader reader, String company) throws IOException, APIErrorException {
-        Bookinginformation booking = null;
+    private BookingInformation readMessageObjectBooking(JsonReader reader, String company) throws IOException, APIErrorException {
+        BookingInformation booking = null;
         //reader.beginObject();
         if (reader.hasNext()) {
             try {
@@ -344,7 +344,7 @@ public class DataFetcher {
         return booking;
     }
 
-    private Bookinginformation readMessageBooking(JsonReader reader, String company) throws IOException, ParseException {
+    private BookingInformation readMessageBooking(JsonReader reader, String company) throws IOException, ParseException {
         Date startPeriod = null;
         Date endPeriod = null;
         Date created = null;
@@ -440,7 +440,7 @@ public class DataFetcher {
             }
         }
         reader.endObject();
-        return new Bookinginformation(startPeriod, endPeriod, created, price, company, regNo, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address);
+        return new BookingInformation(startPeriod, endPeriod, created, price, company, regNo, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address);
     }
     
 //    private Date StringToDate(String date) throws ParseException { // Nov 1, 2019 10:00:00 AM

@@ -2,16 +2,12 @@ package unittest;
 
 import dto.CarDTO;
 import exceptions.APIErrorException;
-import exceptions.AuthenticationException;
 import facade.DataFetcher;
 import java.util.List;
-import javax.persistence.EntityManagerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import testutils.TestUtils;
-import utils.PuSelector;
 
 public class FetcherTest {
 

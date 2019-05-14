@@ -117,7 +117,7 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Rating> ratingCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<Bookinginformation> bookinginformationCollection;
+    private Collection<BookingInformation> bookinginformationCollection;
 
     public User() {
     }
@@ -247,11 +247,11 @@ public class User implements Serializable {
         this.ratingCollection = ratingCollection;
     }
 
-    public Collection<Bookinginformation> getBookinginformationCollection() {
+    public Collection<BookingInformation> getBookinginformationCollection() {
         return bookinginformationCollection;
     }
 
-    public void setBookinginformationCollection(Collection<Bookinginformation> bookinginformationCollection) {
+    public void setBookinginformationCollection(Collection<BookingInformation> bookinginformationCollection) {
         this.bookinginformationCollection = bookinginformationCollection;
     }
 
