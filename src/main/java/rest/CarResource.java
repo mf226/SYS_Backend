@@ -18,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import facade.DataFetcher;
+import facade.UserFacade;
 import javax.ws.rs.POST;
 import utils.PuSelector;
 import utils.SetupTestUsers;
@@ -47,7 +48,9 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/test")
     public Response test() {
-        SetupTestUsers.createTestUsers();
+        if (UserFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllUsers().isEmpty()) {
+            SetupTestUsers.createTestUsers();
+        }
         return Response.ok().entity(gson.toJson("You are connected")).build();
     }
 

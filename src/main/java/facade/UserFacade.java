@@ -4,6 +4,7 @@ import entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import exceptions.AuthenticationException;
+import java.util.List;
 import utils.PuSelector;
 
 /**
@@ -43,6 +44,15 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
         try {
             return em.createNamedQuery("User.findByUserName", User.class).setParameter("userName", userName).getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<User>getAllUsers(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createNamedQuery("User.findAll", User.class).getResultList();
         } finally {
             em.close();
         }
