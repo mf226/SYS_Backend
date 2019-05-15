@@ -16,7 +16,7 @@ public class FetcherTest {
 
     @BeforeClass
     public static void setUpClass() {
-        fetcher = DataFetcher.getInstance(PuSelector.getEntityManagerFactory("pu"));
+        fetcher = DataFetcher.getInstance(PuSelector.getEntityManagerFactory("pu_unit_test_mock"));
     }
 
     @AfterClass
