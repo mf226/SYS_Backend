@@ -121,8 +121,6 @@ public class CarResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/listMyCar")
     public Response listOwnCar(String content) {
-        //DataFetcher df = new DataFetcher();
-        //List<CarDTO> allCars = DataFetcher;
         CarDTO dto;
         try {
             dto = facade.listOwnCar(gson.fromJson(content, CarDTO.class));
