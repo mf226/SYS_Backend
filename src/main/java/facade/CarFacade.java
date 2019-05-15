@@ -1,9 +1,15 @@
 package facade;
 
 import dto.CarDTO;
+import entity.BookingInformation;
 import entity.Car;
 import entity.Country;
 import entity.User;
+import exceptions.FacadeException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,15 +31,47 @@ public class CarFacade {
         return instance;
     }
 
-    public List<Car> getAllCars() {
+    public List<CarDTO> getAllCars() {
         EntityManager em = emf.createEntityManager();
-        List<Car> cars;
+        List<CarDTO> cars;
         try {
-            cars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
+            cars = em.createNamedQuery("CarDTO.findAll", CarDTO.class).getResultList();
         } finally {
             em.close();
         }
         return cars;
+    }
+
+    List<CarDTO> getAllAvailableCars(String start, String end) throws FacadeException {
+        EntityManager em = emf.createEntityManager();
+        List<CarDTO> carsDTO = new ArrayList();
+        try {
+            List<Car> cars = em.createNamedQuery("Car.findAll", Car.class).getResultList();
+            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAll", BookingInformation.class).getResultList();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = sdf.parse(start);
+            Date endDate = sdf.parse(end);
+            for (BookingInformation booking : bookings) {
+                Date s = booking.getStartPeriod();
+                Date e = booking.getEndPeriod();
+                boolean inside = startDate.after(s) && endDate.before(e);
+                boolean through = startDate.before(s) && endDate.after(e);
+                boolean atStart = startDate.before(s) && endDate.after(s);
+                boolean atEnd = startDate.before(e) && endDate.after(e);
+                if (inside || through || atStart || atEnd) {
+                    cars.removeIf(car -> (car.getRegno().equals(booking.getCarRegNo())));
+                }
+            }
+            for (Car car : cars) {
+                CarDTO dto = new CarDTO(car);
+                carsDTO.add(dto);
+            }
+        } catch (ParseException ex) {
+            throw new FacadeException("Date format is unsupported!");
+        } finally {
+            em.close();
+        }
+        return carsDTO;
     }
 
     public CarDTO listOwnCar(CarDTO dto) {
@@ -51,4 +89,18 @@ public class CarFacade {
         return dto;
     }
 
+    CarDTO getSpecificCar(String regno) throws FacadeException {
+        EntityManager em = emf.createEntityManager();
+        CarDTO car;
+        try {
+            car = em.createNamedQuery("CarDTO.findByRegno", CarDTO.class).setParameter("regno", regno).getSingleResult();
+        } catch (Exception ex) {
+            throw new FacadeException(ex.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return car;
+
+    }
 }

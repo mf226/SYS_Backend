@@ -8,21 +8,18 @@ import dto.CarDTO;
 import dto.Company;
 import entity.BookingInformation;
 import entity.User;
+import exceptions.FacadeException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -30,8 +27,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utils.PuSelector;
 
 /**
@@ -60,7 +55,16 @@ public class DataFetcher {
         @Override
         public List<CarDTO> call() throws Exception {
             DataFetcher df = new DataFetcher();
+            if ("local".equals(url)) {
+                if (start != null && end != null) {
+
+                    return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllAvailableCars(start, end);
+                }
+                return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllCars();
+
+            }
             if (start != null && end != null) {
+
                 return df.getAllAvailableCarsFromOneAPI(url, start, end);
             }
             return df.getAllCarsFromOneAPI(url);
@@ -72,41 +76,37 @@ public class DataFetcher {
     public DataFetcher() {
         companies = new ArrayList<>();
         companies.add(new Company("dueinator", "https://www.dueinator.dk/jwtbackend/api/car/"));
+        companies.add(new Company("TTT", "local"));
 
         //Add more companies here to add them to the list of API calls.
     }
 
-    public BookinginformationDTO rentCar(String company, String regno, String start, String end) throws APIErrorException {
+    public BookinginformationDTO rentCar(String company, String regno, String start, String end) throws APIErrorException, FacadeException {
         BookinginformationDTO dto;
-        switch (company) {
+        switch (company.toLowerCase()) {
+            case "ttt":
+                throw new APIErrorException("TTT sucks and have not yet implemented this.");
+            //break;
             case "dueinator":
                 String baseURL = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
                 String url = baseURL + "rent/" + regno + "/" + start + "/" + end;
                 dto = postRentCarToAPI(url, company);
                 break;
-//            case "ttt":
-//                price = reader.nextDouble();
-//                break;
             default:
                 throw new APIErrorException("Company doesn't exist");
         }
         return dto;
     }
 
-    private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException {
+    private BookinginformationDTO postRentCarToAPI(String url, String company) throws APIErrorException, FacadeException {
         BookingInformation booking;
         try {
-            System.out.println(url);
-            System.out.println(url);
-            System.out.println(url);
-            System.out.println(url);
-            System.out.println(url);
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json;charset=UTF-8");
             con.setRequestProperty("User-Agent", "server");
             if (con.getResponseCode() != 200) {
-                throw new APIErrorException(con.getResponseMessage()+"whatupbitch!");
+                throw new APIErrorException(con.getResponseMessage() + "whatupbitch!");
             }
 
             JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
@@ -115,15 +115,19 @@ public class DataFetcher {
             } finally {
                 reader.close();
             }
-            
+
             return BookingFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).createBooking(booking);
             //return new BookinginformationDTO(booking);
         } catch (IOException ey) {
             throw new APIErrorException(ey.getMessage());
-        }
+        } 
     }
 
-    public CarDTO getSpecificCar(String regno, String company) throws APIErrorException {
+    public CarDTO getSpecificCar(String regno, String company) throws APIErrorException, FacadeException {
+        
+        if("ttt".equals(company.toLowerCase())) {
+            return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getSpecificCar(regno);
+        }
 
         try {
             String url = companies.get(companies.indexOf(new Company(company, ""))).getUrl().concat(regno);
@@ -362,7 +366,7 @@ public class DataFetcher {
         String latitude = null;
         String longitude = null;
         String address = null;
-        
+
         Gson gson = new Gson();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
         reader.beginObject();
@@ -442,7 +446,7 @@ public class DataFetcher {
         reader.endObject();
         return new BookingInformation(startPeriod, endPeriod, created, price, company, regNo, manufactor, model, type, releaseYear, drivingDist, seats, drive, fuelType, longitude, latitude, address);
     }
-    
+
 //    private Date StringToDate(String date) throws ParseException { // Nov 1, 2019 10:00:00 AM
 //        String[] strings = date.split(" ");
 //        int year = Integer.parseInt(strings[2]);
