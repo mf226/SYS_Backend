@@ -3,6 +3,7 @@ package facade;
 import dto.BookinginformationDTO;
 import entity.BookingInformation;
 import exceptions.FacadeException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -47,6 +48,20 @@ public class BookingFacade {
             em.close();
         }
         return new BookinginformationDTO(booking);
+    }
+
+    public Object getAllBookingsByUserName(String userName) {
+        EntityManager em = emf.createEntityManager();
+        List<BookinginformationDTO> DTO = new ArrayList();
+        try {
+            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).getResultList();
+            for (BookingInformation booking : bookings) {
+                DTO.add(new BookinginformationDTO(booking));
+            }
+        } finally {
+            em.close();
+        }
+        return DTO;
     }
 
 }
