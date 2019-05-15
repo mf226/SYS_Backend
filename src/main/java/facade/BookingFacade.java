@@ -64,4 +64,14 @@ public class BookingFacade {
         return DTO;
     }
 
+    public boolean cancelOrderByOrderId(String userName, String orderId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).setParameter("userName", userName).getResultList();
+        } finally {
+            em.close();
+        }
+        return true;
+    }
+
 }
