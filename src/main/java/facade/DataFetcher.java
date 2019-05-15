@@ -8,6 +8,7 @@ import dto.CarDTO;
 import dto.Company;
 import entity.BookingInformation;
 import entity.User;
+import exceptions.BookingException;
 import exceptions.FacadeException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +76,7 @@ public class DataFetcher {
     }
 
     private List<Company> companies;
-    
+
     private static EntityManagerFactory emf;
     private static DataFetcher instance;
 
@@ -95,11 +96,12 @@ public class DataFetcher {
         //Add more companies here to add them to the list of API calls.
     }
 
-    public BookinginformationDTO rentCar(String company, String regno, String start, String end) throws APIErrorException, FacadeException {
+    public BookinginformationDTO rentCar(String company, String regno, String start, String end) throws APIErrorException, FacadeException, BookingException {
         BookinginformationDTO dto;
         switch (company.toLowerCase()) {
             case "ttt":
-                throw new APIErrorException("TTT sucks and have not yet implemented this.");
+                BookingFacade bf = BookingFacade.getInstance(emf);
+                return bf.createBooking(company, regno, start, end);
             //break;
             case "dueinator":
                 String baseURL = companies.get(companies.indexOf(new Company(company, ""))).getUrl();
@@ -134,12 +136,12 @@ public class DataFetcher {
             //return new BookinginformationDTO(booking);
         } catch (IOException ey) {
             throw new APIErrorException(ey.getMessage());
-        } 
+        }
     }
 
     public CarDTO getSpecificCar(String regno, String company) throws APIErrorException, FacadeException {
-        
-        if("ttt".equals(company.toLowerCase())) {
+
+        if ("ttt".equals(company.toLowerCase())) {
             return CarFacade.getInstance(emf).getSpecificCar(regno);
         }
 
