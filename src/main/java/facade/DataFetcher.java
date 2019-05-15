@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import javax.persistence.EntityManagerFactory;
 import utils.PuSelector;
 
 /**
@@ -39,17 +40,20 @@ public class DataFetcher {
 
         String url;
         String start, end;
+        EntityManagerFactory emf;
 
-        FetchCars(String url) {
+        FetchCars(String url, EntityManagerFactory emf) {
             this.url = url;
             this.start = null;
             this.end = null;
+            this.emf = emf;
         }
 
-        FetchCars(String url, String start, String end) {
+        FetchCars(String url, String start, String end, EntityManagerFactory emf) {
             this.url = url;
             this.start = start;
             this.end = end;
+            this.emf = emf;
         }
 
         @Override
@@ -58,9 +62,9 @@ public class DataFetcher {
             if ("local".equals(url)) {
                 if (start != null && end != null) {
 
-                    return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllAvailableCars(start, end);
+                    return CarFacade.getInstance(emf).getAllAvailableCars(start, end);
                 }
-                return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllCars();
+                return CarFacade.getInstance(emf).getAllCars();
 
             }
             if (start != null && end != null) {
@@ -72,6 +76,17 @@ public class DataFetcher {
     }
 
     private List<Company> companies;
+    
+    private static EntityManagerFactory emf;
+    private static DataFetcher instance;
+
+    public static DataFetcher getInstance(EntityManagerFactory factory) {
+        if (instance == null) {
+            emf = factory;
+            instance = new DataFetcher();
+        }
+        return instance;
+    }
 
     public DataFetcher() {
         companies = new ArrayList<>();
@@ -116,7 +131,7 @@ public class DataFetcher {
                 reader.close();
             }
 
-            return BookingFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).createBooking(booking);
+            return BookingFacade.getInstance(emf).createBooking(booking);
             //return new BookinginformationDTO(booking);
         } catch (IOException ey) {
             throw new APIErrorException(ey.getMessage());
@@ -126,7 +141,7 @@ public class DataFetcher {
     public CarDTO getSpecificCar(String regno, String company) throws APIErrorException, FacadeException {
         
         if("ttt".equals(company.toLowerCase())) {
-            return CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getSpecificCar(regno);
+            return CarFacade.getInstance(emf).getSpecificCar(regno);
         }
 
         try {
@@ -156,7 +171,7 @@ public class DataFetcher {
         ExecutorService executor = Executors.newCachedThreadPool();
         List<Future<List<CarDTO>>> futures = new ArrayList<>();
         for (Company c : companies) {
-            FetchCars fs = new FetchCars(c.getUrl());
+            FetchCars fs = new FetchCars(c.getUrl(), emf);
             Future future = executor.submit(fs);
             futures.add(future);
         }
@@ -181,7 +196,7 @@ public class DataFetcher {
         ExecutorService executor = Executors.newCachedThreadPool();
         List<Future<List<CarDTO>>> futures = new ArrayList<>();
         for (Company c : companies) {
-            FetchCars fs = new FetchCars(c.getUrl(), start, end);
+            FetchCars fs = new FetchCars(c.getUrl(), start, end, emf);
             Future future = executor.submit(fs);
             futures.add(future);
         }
