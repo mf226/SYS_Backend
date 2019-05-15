@@ -36,13 +36,12 @@ public class UserRessource {
     @Path("/orders")
     @RolesAllowed("user")
     public Response getAllOrdersByUser() {
-//        try {
-//            String userName = securityContext.getUserPrincipal().getName();
-//            return Response.ok().entity(GSON.toJson(BF.getAllBookingsByUserName(userName))).build();
-//        } catch (Exception ex) {
-//            return GEM.toResponse(ex);
-//        }
-        return Response.ok().entity("Works").build();
+        try {
+            String userName = securityContext.getUserPrincipal().getName();
+            return Response.ok().entity(GSON.toJson(BF.getAllBookingsByUserName(userName))).build();
+        } catch (Exception ex) {
+            return GEM.toResponse(ex);
+        }
     }
 
     @GET

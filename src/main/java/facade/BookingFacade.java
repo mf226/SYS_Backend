@@ -71,16 +71,6 @@ public class BookingFacade {
         return DTO;
     }
 
-<<<<<<< HEAD
-    public boolean cancelOrderByOrderId(String userName, String orderId) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).setParameter("userName", userName).getResultList();
-        } finally {
-            em.close();
-        }
-        return true;
-=======
     public BookinginformationDTO createBooking(String company, String regNo, String start, String end) throws BookingException {
         EntityManager em = emf.createEntityManager();
         BookinginformationDTO bookingInformationDTO;
@@ -110,7 +100,7 @@ public class BookingFacade {
             double price = car.getPrice() * getDays(s, e);
             s.setHours(10);
             e.setHours(8);
-                            //Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
+            //Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
             BookingInformation bi = new BookingInformation(s, e, Calendar.getInstance(TimeZone.getTimeZone("da_DK")).getTime(), price, company, car.getRegno(), car.getManufactor(), car.getModel(), car.getType(), car.getReleaseYear(), car.getDrivingDist(), car.getSeats(), car.getDrive(), car.getFuelType(), car.getLongitude(), car.getLatitude(), car.getAddress());
             //bi.setCar(car);
             em.persist(bi);
@@ -130,7 +120,7 @@ public class BookingFacade {
         Date dateObj = sdf.parse(date);
         return dateObj;
     }
-    
+
     private long getDays(Date s, Date e) throws BookingException {
         if (e.before(s)) {
             throw new BookingException("Start date:" + s + " and end date: " + e + " is not a valid period");
@@ -157,7 +147,16 @@ public class BookingFacade {
             throw new BookingException("While calculating days between dates an error occurred! Days is lower than 0 (days: " + days + ")");
         }
         return days;
->>>>>>> 4e289d6848ac6cae23a3570cae577c314670409f
+
     }
 
+    public boolean cancelOrderByOrderId(String userName, String orderId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).setParameter("userName", userName).getResultList();
+        } finally {
+            em.close();
+        }
+        return true;
+    }
 }
