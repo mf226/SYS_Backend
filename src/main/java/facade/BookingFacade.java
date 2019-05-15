@@ -50,11 +50,11 @@ public class BookingFacade {
         return new BookinginformationDTO(booking);
     }
 
-    public Object getAllBookingsByUserName(String userName) {
+    public List<BookinginformationDTO> getAllBookingsByUserName(String userName) {
         EntityManager em = emf.createEntityManager();
         List<BookinginformationDTO> DTO = new ArrayList();
         try {
-            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).getResultList();
+            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).setParameter("userName", userName).getResultList();
             for (BookingInformation booking : bookings) {
                 DTO.add(new BookinginformationDTO(booking));
             }

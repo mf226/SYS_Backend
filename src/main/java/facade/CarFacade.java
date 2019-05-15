@@ -103,4 +103,19 @@ public class CarFacade {
         return car;
 
     }
+
+    public Object getAllOwnCarsByUserName(String userName) {
+        EntityManager em = emf.createEntityManager();
+        List<CarDTO> DTO = new ArrayList();
+        try {
+            List<Car> cars = em.createNamedQuery("Car.findAllByUser", Car.class).setParameter("userName", userName).getResultList();
+            for (Car car : cars) {
+                DTO.add(new CarDTO(car));
+            }
+        } finally {
+            em.close();
+        }
+        return DTO;
+    }
+
 }

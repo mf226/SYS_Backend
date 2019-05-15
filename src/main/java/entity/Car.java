@@ -24,7 +24,8 @@ import javax.validation.constraints.Size;
     @UniqueConstraint(columnNames = {"regno"})})
 @NamedQueries({
     @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c")
-                                                        //String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country, String company, String userName
+    ,@NamedQuery(name = "Car.findAllByUser", query = "SELECT c FROM Car c WHERE c.user.userName = :userName")
+    //String regno, double price, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, String country, String company, String userName
     , @NamedQuery(name = "CarDTO.findAll", query = "SELECT NEW dto.CarDTO(c.regno, c.price, c.manufactor, c.model, c.type, c.releaseYear, c.drivingDist, c.seats, c.drive, c.fuelType, c.longitude, c.latitude, c.address, c.country.country, 'TTT', c.user.userName) FROM Car c")
     , @NamedQuery(name = "Car.findByRegno", query = "SELECT c FROM Car c WHERE c.regno = :regno")
     , @NamedQuery(name = "CarDTO.findByRegno", query = "SELECT NEW dto.CarDTO(c.regno, c.price, c.manufactor, c.model, c.type, c.releaseYear, c.drivingDist, c.seats, c.drive, c.fuelType, c.longitude, c.latitude, c.address, c.country.country, 'TTT', c.user.userName) FROM Car c WHERE c.regno = :regno")
