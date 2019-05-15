@@ -8,7 +8,7 @@
         <title>TTT Car Rental Service</title>
     </head>
     <body>
-        <header id="section-6">
+        <header id="section-7">
             <div>
                 <h1>Car Rental Service - The Turtle Troopers</h1>
             </div>
@@ -20,8 +20,9 @@
                 <li><a href="#section-2">API Key</a></li>
                 <li><a href="#section-3">GET</a></li>
                 <li><a href="#section-4">POST</a></li>
-                <li><a href="#section-5">External links</a></li>
-                <li><a href="#section-6">Back to the top &uarr;</a></li>
+                <li><a href="#section-5">PUT</a></li>
+                <li><a href="#section-6">External links</a></li>
+                <li><a href="#section-7">Back to the top &uarr;</a></li>
             </ul>
         </nav>
 
@@ -38,7 +39,7 @@
                 <div class="container">
                     <div class="control-group">
                         <h2>API Key</h2>
-                        <p>Coming soon...</p>
+                        <p>Coming next year...</p>
                     </div>
                 </div>
             </section>
@@ -113,15 +114,10 @@
                 <div class="container">
                     <div class="control-group">
                         <h2>POST</h2>
-                        <h3>Book car (not really a post, use GET)</h3>
-                        <p>Call: <a href="http://www.fenonline.dk/SYS_Backend/api/car/rent/dueinator/AJ65365/2020-02-05/2020-02-06">https://www.fenonline.dk/SYS_Backend/api/car/rent/{company}/{regno}/{startdate}/{enddate}</a><br>JSON:</p>
+                        <h3>List my own car for rental</h3>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/car/listMyCar</p>
+                        <p>JSON input:</p>
                         <p>{<br>
-                            "id": 1,<br>
-                            "startPeriod": "Wed Feb 05 10:00:00 CET 2020",<br>
-                            "endPeriod": "Thu Feb 06 08:00:00 CET 2020",<br>
-                            "created": "Fri May 10 09:42:26 CEST 2019",<br>
-                            "price": 302.85,<br>
-                            "car": {<br>
                             "regno": "AJ65365",<br>
                             "price": 0.0,<br>
                             "manufactor": "Ford",<br>
@@ -134,46 +130,41 @@
                             "fuelType": "Gas",<br>
                             "longitude": "13.371700000000033",<br>
                             "latitude": "55.5355",<br>
-                            "address": "Malmö Airport, Skåne län, Sweden",<br>
-                            "company": "dueinator"<br>
+                            "address": "Malmö Airport",<br>
+                            "country": "Sweden",<br>
+                            "company": "dueinator",<br>
+                            "userName": "TestUser"<br>
                             }<p>
-
-                    </div>
-                </div>
-            </section>
-            <section id="section-5">
-                <div class="container">
-                    <div class="control-group">
-                        <h2>PUT</h2>
-                        <h3>Book car (not really a post, use GET)</h3>
-                        <p>Call: <a href="http://www.fenonline.dk/SYS_Backend/api/car/listMyCar">https://www.fenonline.dk/SYS_Backend/api/car/listMyCar</a><br> Expected JSON in body:</p>
+                        <p>JSON output:</p>
                         <p>{<br>
-                        "regno": "ZZ99999",<br>
-                        "price": 999.72,<br>
-                        "manufactor": "Ford",<br>
-                        "model": "Escort",<br>
-                        "type": "SUV",<br>
-                        "releaseYear": 1998,<br>
-                        "drivingDist": 337553,<br>
-                        "seats": 5,<br>
-                        "drive": "Manual",<br>
-                        "fuelType": "Gas",<br>
-                        "longitude": "12.6509822",<br>
-                        "latitude": "55.6091282",<br>
-                        "address": "Copenhagen Airport, Tårnby Kommune, Denmark",<br>
-                        "country": "Jordan",<br>
-                        "company": "TTT",<br>
-                        "userName": "TestUser"<br>
-                        }<p>
-
+                            "regno": "AJ65365",<br>
+                            "price": 0.0,<br>
+                            "manufactor": "Ford",<br>
+                            "model": "Explorer",<br>
+                            "type": "SUV",<br>
+                            "releaseYear": 2001,<br>
+                            "drivingDist": 99582,<br>
+                            "seats": 5,<br>
+                            "drive": "Manual",<br>
+                            "fuelType": "Gas",<br>
+                            "longitude": "13.371700000000033",<br>
+                            "latitude": "55.5355",<br>
+                            "address": "Malmö Airport",<br>
+                            "country": "Sweden",<br>
+                            "company": "dueinator",<br>
+                            "userName": "TestUser"<br>
+                            }<p>
                     </div>
                 </div>
             </section>
+
             <section id="section-6">
                 <div class="container">
                     <div class="control-group">
                         <h2>External links</h2>
-                        <p><a href="https://dueinator.dk/jwtbackend/">TTT Car Api</a></p>
+                        <p><a href="https://fenonline.dk/SYS_Backend/">TTT Car Rental Service - Backend</a> - <a href="https://github.com/mf226/SYS_Backend">Github</a></p>
+                        <p><a href="http://thesilverflame.surge.sh/">TTT Car Rental Service - Frontend</a> - <a href="https://github.com/jesper3005/SYS-frontend">Github</a></p>
+                        <p><a href="https://dueinator.dk/jwtbackend/">TTT Car API</a> - <a href="https://github.com/mich561d/SYS_API">Github</a></p>
                     </div>
                 </div>
             </section>
