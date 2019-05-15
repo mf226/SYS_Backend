@@ -26,6 +26,7 @@ import javax.validation.constraints.Size;
 @Table(name = "bookinginformation")
 @NamedQueries({
     @NamedQuery(name = "BookingInformation.findAll", query = "SELECT b FROM BookingInformation b")
+    ,@NamedQuery(name = "BookingInformation.findAllByUser", query = "SELECT b FROM BookingInformation b WHERE b.user.userName = :userName")
     , @NamedQuery(name = "BookingInformation.findById", query = "SELECT b FROM BookingInformation b WHERE b.id = :id")
     , @NamedQuery(name = "BookingInformation.findByStartPeriod", query = "SELECT b FROM BookingInformation b WHERE b.startPeriod = :startPeriod")
     , @NamedQuery(name = "BookingInformation.findByEndPeriod", query = "SELECT b FROM BookingInformation b WHERE b.endPeriod = :endPeriod")
