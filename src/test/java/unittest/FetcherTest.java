@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import utils.PuSelector;
 
 public class FetcherTest {
 
@@ -15,7 +16,7 @@ public class FetcherTest {
 
     @BeforeClass
     public static void setUpClass() {
-        fetcher = new DataFetcher();
+        fetcher = DataFetcher.getInstance(PuSelector.getEntityManagerFactory("pu"));
     }
 
     @AfterClass

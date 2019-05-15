@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import facade.DataFetcher;
 import facade.UserFacade;
+import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.POST;
 import utils.PuSelector;
 import utils.SetupTestUsers;
@@ -32,7 +33,9 @@ import utils.SetupTestUsers;
 public class CarResource {
 
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    CarFacade facade = CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
+    EntityManagerFactory emf = PuSelector.getEntityManagerFactory("pu");
+    CarFacade facade = CarFacade.getInstance(emf);
+    DataFetcher df = DataFetcher.getInstance(emf);
     GenericExceptionMapper gem = new GenericExceptionMapper();
 
     @Context
@@ -58,7 +61,7 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{regno}/{company}")
     public Response getCar(@PathParam("regno") String regno, @PathParam("company") String company) {
-        DataFetcher df = new DataFetcher();
+        
         try {
             CarDTO car = df.getSpecificCar(regno, company);
             return Response.ok().entity(gson.toJson(car)).build();
@@ -73,7 +76,6 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/all")
     public Response getAllCars() {
-        DataFetcher df = new DataFetcher();
         //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;
         try {
@@ -89,8 +91,6 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/available/{start}/{end}")
     public Response getAllAvailableCars(@PathParam("start") String start, @PathParam("end") String end) {
-        DataFetcher df = new DataFetcher();
-        //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;
         try {
             allCars = df.getAllAvailableCarsAllAPIs(start, end);
@@ -105,8 +105,6 @@ public class CarResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/rent/{company}/{regno}/{start}/{end}")
     public Response rentAvailableCar(@PathParam("company") String company, @PathParam("regno") String regno, @PathParam("start") String start, @PathParam("end") String end) {
-        DataFetcher df = new DataFetcher();
-        //List<CarDTO> allCars = DataFetcher;
         BookinginformationDTO dto;
         try {
             dto = df.rentCar(company, regno, start, end);
