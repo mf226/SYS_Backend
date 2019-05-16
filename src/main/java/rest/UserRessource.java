@@ -63,8 +63,7 @@ public class UserRessource {
     @RolesAllowed("user")
     public Response getAllOwnCarsByUser(@PathParam("orderId") String orderId) {
         try {
-            String userName = securityContext.getUserPrincipal().getName();
-            return Response.ok().entity(GSON.toJson(BF.cancelOrderByOrderId(userName, orderId))).build();
+            return Response.ok().entity(GSON.toJson(BF.cancelOrderByOrderId(orderId))).build();
         } catch (Exception ex) {
             return GEM.toResponse(ex);
         }

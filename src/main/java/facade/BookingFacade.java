@@ -1,10 +1,19 @@
 package facade;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import dto.BookinginformationDTO;
 import entity.BookingInformation;
 import entity.Car;
+import exceptions.APIErrorException;
 import exceptions.BookingException;
 import exceptions.FacadeException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -150,13 +161,58 @@ public class BookingFacade {
 
     }
 
-    public boolean cancelOrderByOrderId(String userName, String orderId) {
+    public boolean cancelOrderByOrderId(String orderId) throws APIErrorException, BookingException {
         EntityManager em = emf.createEntityManager();
         try {
-            List<BookingInformation> bookings = em.createNamedQuery("BookingInformation.findAllByUser", BookingInformation.class).setParameter("userName", userName).getResultList();
+            em.getTransaction().begin();
+            BookingInformation booking = em.find(BookingInformation.class, orderId);
+            String company = booking.getCompany().toLowerCase();
+            int companyOrderId = booking.getCompanyId();
+            switch (company) {
+                case "dueinator":
+                    String url = "https://dueinator.dk/jwtbackend/api/car/cancel/" + companyOrderId;
+                    fetch(url, company);
+                    break;
+                case "deck-cs":
+                    break; // Not implemented yet!
+                case "ttt":
+                    break; // Nothing shall happen!
+                default:
+                    throw new BookingException("Something went wrong while trying to cancel your booking!");
+            }
+            em.remove(booking);
+            em.getTransaction().commit();
         } finally {
             em.close();
         }
         return true;
+    }
+
+    private boolean fetch(String url, String company) throws APIErrorException {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.setRequestProperty("User-Agent", "server");
+            if (con.getResponseCode() != 200) {
+                throw new APIErrorException(con.getResponseMessage());
+            }
+            JsonReader reader = new JsonReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            boolean b = false;
+            try {
+                if (reader.hasNext()) {
+                    reader.beginObject();
+                    b = reader.nextBoolean();
+                    reader.endObject();
+                }
+            } catch (IOException ex) {
+                throw new APIErrorException("The booking did not cancel in the target API");
+            } finally {
+                reader.close();
+            }
+            return b;
+        } catch (IOException ex) {
+            throw new APIErrorException(ex.getMessage());
+        }
     }
 }
