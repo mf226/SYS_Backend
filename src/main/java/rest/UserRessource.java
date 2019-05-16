@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.UserDTO;
 import exceptions.GenericExceptionMapper;
 import facade.BookingFacade;
 import facade.CarFacade;
@@ -67,7 +68,7 @@ public class UserRessource {
         try {
             //WORK FFS
             String userName = securityContext.getUserPrincipal().getName();
-            return Response.ok().entity(GSON.toJson(UF.getUserByUserName(userName))).build();
+            return Response.ok().entity(GSON.toJson(new UserDTO(UF.getUserByUserName(userName)))).build();
         } catch (Exception ex) {
             return GEM.toResponse(ex);
         }

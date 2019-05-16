@@ -135,7 +135,6 @@ public class User implements Serializable {
         this.driverLicenseNumber = driverLicenseNumber;
     }
 
-
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {
             return null;
