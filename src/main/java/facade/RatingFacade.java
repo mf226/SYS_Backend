@@ -4,6 +4,8 @@ import dto.RatingDTO;
 import entity.Rating;
 import entity.User;
 import exceptions.FacadeException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,12 +45,18 @@ public class RatingFacade {
         for (Rating r : ratings) {
             sumOfRatings += r.getRating();
         }
+//        DecimalFormat df = new DecimalFormat("#.##");
+//        df.setRoundingMode(RoundingMode.CEILING);
+//        double average = df.format
 
-        return new RatingDTO(userName, (sumOfRatings / ratings.size()));
+        return new RatingDTO(userName, ((double) sumOfRatings / ratings.size()));
     }
 
-    public RatingDTO createRating(RatingDTO dto) {
+    public RatingDTO createRating(RatingDTO dto) throws FacadeException {
         EntityManager em = emf.createEntityManager();
+        if (dto.getRating() < 1 || dto.getRating() > 5) {
+            throw new FacadeException("A rating must be between 1 and 5 stars");
+        }
         try {
             User user = UserFacade.getInstance(emf).getUserByUserName(dto.getUserName());
             Rating rating = new Rating((int) dto.getRating(), user);
