@@ -111,7 +111,7 @@ public class IntegrationTest {
             .contentType("application/json")
             .when()
             .get("/api/car/available/20190101/20190202").then()
-            .statusCode(500)
+            .statusCode(409)
             ;
   }
   
@@ -131,7 +131,7 @@ public class IntegrationTest {
             .contentType("application/json")
             .when()
             .get("/api/car/ZZZZZZZ/dueinator").then()
-            .statusCode(500)
+            .statusCode(409)
             ;
   }
 
