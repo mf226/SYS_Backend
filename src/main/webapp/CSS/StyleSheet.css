@@ -109,6 +109,10 @@ section {
     align-items: center;
     opacity: 0.95;
 }
+b {
+    padding-left: 1rem;
+    font-weight: normal;
+}
 footer {
     grid-column: 1 / 3;
     background: #252E39;
