@@ -2,6 +2,7 @@ package facade;
 
 import dto.RatingDTO;
 import entity.Rating;
+import entity.User;
 import exceptions.FacadeException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -46,7 +47,17 @@ public class RatingFacade {
         return new RatingDTO(userName, (sumOfRatings / ratings.size()));
     }
 
-    public RatingDTO createRating(RatingDTO fromJson) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public RatingDTO createRating(RatingDTO dto) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = UserFacade.getInstance(emf).getUserByUserName(dto.getUserName());
+            Rating rating = new Rating((int) dto.getRating(), user);
+            em.getTransaction().begin();
+            em.persist(rating);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return dto;
     }
 }

@@ -1,5 +1,6 @@
 package entity;
 
+import dto.RatingDTO;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -40,14 +41,10 @@ public class Rating implements Serializable {
 
     public Rating() {
     }
-
-    public Rating(Integer id) {
-        this.id = id;
-    }
-
-    public Rating(Integer id, int rating) {
-        this.id = id;
+    
+    public Rating(int rating, User user) {
         this.rating = rating;
+        this.user = user;
     }
 
     public Integer getId() {
