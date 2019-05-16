@@ -78,6 +78,8 @@ public class BookingInformation implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "company", nullable = false, length = 45)
     private String company;
+    @Column(name = "companyID")
+    private int companyId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -115,7 +117,7 @@ public class BookingInformation implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "fuelType", nullable = false, length = 45)
     private String fuelType;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name")
     @ManyToOne(optional = false)
     private User user;
     @Basic(optional = false)
@@ -136,7 +138,7 @@ public class BookingInformation implements Serializable {
 
     public BookingInformation() {
     }
-
+    
     public BookingInformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
@@ -155,6 +157,35 @@ public class BookingInformation implements Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
+    }
+
+    public BookingInformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address, int companyId) {
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
+        this.created = created;
+        this.price = price;
+        this.carRegNo = carRegNo;
+        this.company = company;
+        this.manufactor = manufactor;
+        this.model = model;
+        this.type = type;
+        this.releaseYear = releaseYear;
+        this.drivingDist = drivingDist;
+        this.seats = seats;
+        this.drive = drive;
+        this.fuelType = fuelType;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.companyId = companyId;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
     public String getLongitude() {

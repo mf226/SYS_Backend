@@ -78,7 +78,7 @@ public class CarFacade {
         EntityManager em = emf.createEntityManager();
         try {
             Country country = CountryFacade.getInstance(emf).getCountryByName(dto.getCountry());
-            User user = UserFacade.getInstance(emf).getUserById(dto.getUserName());
+            User user = UserFacade.getInstance(emf).getUserByUserName(dto.getUserName());
             Car car = new Car(dto, country, user);
             em.getTransaction().begin();
             em.persist(car);
