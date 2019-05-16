@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 
 /*
   Utility class to map errors into JSON
-*/
+ */
 class Error {
 
     private int statusCode;
@@ -48,12 +48,15 @@ class Error {
         this.errorMessage = errorMessage;
     }
 }
+
 @Provider
-public class GenericExceptionMapper implements ExceptionMapper<Throwable>  {
+public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+
     static private final Gson gson = new Gson();
+
     @Override
-    public Response toResponse(Throwable  ex) {
-       
+    public Response toResponse(Throwable ex) {
+
         Response.StatusType type = getStatusType(ex);
         Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -61,8 +64,8 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>  {
                 type.getStatusCode(),
                 type.getReasonPhrase(),
                 ex.getLocalizedMessage());
-        
-        String errJson =gson.toJson(error); 
+
+        String errJson = gson.toJson(error);
         return Response.status(error.getStatusCode())
                 .entity(errJson)
                 .type(MediaType.APPLICATION_JSON)
@@ -70,24 +73,33 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>  {
     }
 
     private Response.StatusType getStatusType(Throwable ex) {
+        if (ex instanceof BookingException) {
+            return Response.Status.BAD_REQUEST;
+        }
+        if (ex instanceof APIErrorException) {
+            return Response.Status.CONFLICT;
+        }
+        if (ex instanceof FacadeException) {
+            return Response.Status.BAD_REQUEST;
+        }
         if (ex instanceof WebApplicationException) {
-            return((WebApplicationException)ex).getResponse().getStatusInfo();
-        } 
-        if(ex instanceof AuthenticationException){
+            return ((WebApplicationException) ex).getResponse().getStatusInfo();
+        }
+        if (ex instanceof AuthenticationException) {
             return Response.Status.FORBIDDEN;
         } else {
             return Response.Status.INTERNAL_SERVER_ERROR;
         }
     }
-    
+
     //Small hack, to provide json-error response in the filter
-    public static Response makeErrRes(String msg,int status){
+    public static Response makeErrRes(String msg, int status) {
         Error error = new Error(
                 status,
                 msg,
                 msg);
-        
-        String errJson =gson.toJson(error); 
+
+        String errJson = gson.toJson(error);
         return Response.status(error.getStatusCode())
                 .entity(errJson)
                 .type(MediaType.APPLICATION_JSON)
