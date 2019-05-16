@@ -34,7 +34,7 @@ public class Rating implements Serializable {
     @NotNull
     @Column(name = "rating", nullable = false)
     private int rating;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name", nullable = false)
     @ManyToOne(optional = false)
     private User user;
 
