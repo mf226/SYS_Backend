@@ -186,14 +186,77 @@
                 <div class="container">
                     <div class="control-group">
                         <h2>GET - User</h2>
+                        <h3>Login</h3>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/login<br>JSON:</p>
+                        <p>{<br>
+                            "username": "Duen420",<br>
+                            "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEdWVuNDIwIiwicm9sZXMiOiJ1c2VyIiwiZXhwIjoxNTU4MDM5MTI2LCJpYXQiOjE1NTgwMzczMjYsImlzc3VlciI6InNlbWVzdGVyZGVtb19zZWN1cml0eV9jb3Vyc2UiLCJ1c2VybmFtZSI6IkR1ZW40MjAifQ.2cXKhNAZac0tDBcQbK2UND_NY1swvmSsoM-mmIu7VCs"<br>
+                            }</p>
                         <h3>Get all orders by user</h3>
-                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/orders<br>JSON:</p>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/orders (@RolesAllowed("user))<br>JSON:</p>
+                        <p>[<br>
+                            {<br>
+                            "id": 1,<br>
+                            "startPeriod": "Mon May 20 00:00:00 UTC 2019",<br>
+                            "endPeriod": "Wed May 29 00:00:00 UTC 2019",<br>
+                            "created": "Thu May 16 00:00:00 UTC 2019",<br>
+                            "price": 914.5,<br>
+                            "car": {<br>
+                            <b>"regno": "IZ71151",</b><br>
+                            <b>"price": 0,</b><br>
+                            <b>"manufactor": "Nissan",</b><br>
+                            <b>"model": "GT-R",</b><br>
+                            <b>"type": "Coupe",</b><br>
+                            <b>"releaseYear": 2010,</b><br>
+                            <b>"drivingDist": 99747,</b><br>
+                            <b>"seats": 5,</b><br>
+                            <b>"drive": "Manual",</b><br>
+                            <b>"fuelType": "Gas",</b><br>
+                            <b>"longitude": "13.371700000000033",</b><br>
+                            <b>"latitude": "55.5355",</b><br>
+                            <b>"address": "Malmö Airport, Skåne län, Sweden",</b><br>
+                            <b>"company": "dueinator"</b><br>
+                            <b>}</b><br>
+                            }<br>
+                            ]</p>
                         <h3>Get all cars by user</h3>
-                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/cars<br>JSON:</p>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/cars (@RolesAllowed("user))<br>JSON:</p>
+                        <p>[<br>
+                            {<br>
+                            "regno": "XD42360",<br>
+                            "price": 99,<br>
+                            "manufactor": "Ford",<br>
+                            "model": "Explorer",<br>
+                            "type": "SUV",<br>
+                            "releaseYear": 2002,<br>
+                            "drivingDist": 91543,<br>
+                            "seats": 5,<br>
+                            "drive": "Manual",<br>
+                            "fuelType": "Gas",<br>
+                            "longitude": "13.371700000000033",<br>
+                            "latitude": "55.5355",<br>
+                            "address": "Malmö Airport",<br>
+                            "country": "Sweden",<br>
+                            "company": "TTT",<br>
+                            "userName": "Duen420"<br>
+                            }<br>
+                            ]</p>
                         <h3>Get all information about user</h3>
-                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/getuser<br>JSON:</p>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/getuser (@RolesAllowed("user))<br>JSON:</p>
+                        <p>{<br>
+                            "userName": "Duen420",<br>
+                            "firstName": "Michael",<br>
+                            "lastName": "P",<br>
+                            "email": "mich2131231231231243562435223d@duen.test",<br>
+                            "birth": "May 16, 2019 12:00:00 AM",<br>
+                            "gender": "male",<br>
+                            "phone": "55555555",<br>
+                            "status": "Active",<br>
+                            "driverLicenseNumber": "1234567893"<br>
+                            }</p>
                         <h3>Cancel users order by order id</h3>
-                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/cancel/{orderId}<br>JSON:</p>
+                        <p>Call: https://www.fenonline.dk/SYS_Backend/api/user/cancel/{orderId} (@RolesAllowed("user))<br>JSON:</p>
+                        <p>Coming soon...</p>
                     </div>
                 </div>
             </section>
