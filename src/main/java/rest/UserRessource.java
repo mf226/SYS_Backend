@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import exceptions.GenericExceptionMapper;
 import facade.BookingFacade;
 import facade.CarFacade;
+import facade.UserFacade;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -23,6 +24,7 @@ public class UserRessource {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final BookingFacade BF = BookingFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
     private final CarFacade CF = CarFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
+    private final UserFacade UF = UserFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
     private final GenericExceptionMapper GEM = new GenericExceptionMapper();
 
     @Context
@@ -52,6 +54,20 @@ public class UserRessource {
         try {
             String userName = securityContext.getUserPrincipal().getName();
             return Response.ok().entity(GSON.toJson(CF.getAllOwnCarsByUserName(userName))).build();
+        } catch (Exception ex) {
+            return GEM.toResponse(ex);
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getuser")
+    @RolesAllowed("user")
+    public Response getUser() {
+        try {
+            //WORK FFS
+            String userName = securityContext.getUserPrincipal().getName();
+            return Response.ok().entity(GSON.toJson(UF.getUserByUserName(userName))).build();
         } catch (Exception ex) {
             return GEM.toResponse(ex);
         }
