@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "rating")
 @NamedQueries({
     @NamedQuery(name = "Rating.findAll", query = "SELECT r FROM Rating r")
-    , @NamedQuery(name = "Rating.findById", query = "SELECT r FROM Rating r WHERE r.id = :id")
+    , @NamedQuery(name = "Rating.findByUser", query = "SELECT r FROM Rating r WHERE r.user.userName = :userName")
     , @NamedQuery(name = "Rating.findByRating", query = "SELECT r FROM Rating r WHERE r.rating = :rating")})
 public class Rating implements Serializable {
 
