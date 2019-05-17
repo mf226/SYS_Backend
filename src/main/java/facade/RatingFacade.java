@@ -4,16 +4,10 @@ import dto.RatingDTO;
 import entity.Rating;
 import entity.User;
 import exceptions.FacadeException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Fen
- */
 public class RatingFacade {
 
     private static EntityManagerFactory emf;

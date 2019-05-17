@@ -1,19 +1,7 @@
 package dto;
 
-import entity.User;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
-/**
- *
- * @author Fen
- */
 public class RatingDTO {
-    
+
     private String userName;
     private double rating;
 
@@ -37,9 +25,5 @@ public class RatingDTO {
     public void setRating(double rating) {
         this.rating = rating;
     }
-    
-    
-    
-    
-    
+
 }

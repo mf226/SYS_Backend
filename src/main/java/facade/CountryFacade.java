@@ -4,10 +4,6 @@ import entity.Country;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Fen
- */
 public class CountryFacade {
 
     private static EntityManagerFactory emf;

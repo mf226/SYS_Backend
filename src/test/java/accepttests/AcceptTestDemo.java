@@ -12,27 +12,26 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class AcceptTestDemo {
-  private static final String APP_CONTEXT = "/jwtbackend";  //IMPORTANT--> this should reflect the value in META-INF/context.xml
-  private static EntityManagerFactory emf;
-  
-  @Test
-  public void serverIsRunning() {
-    System.out.println("TESTING IF SERVER IS RUNNING");
-    given().when().get().then().statusCode(200); 
-  }
 
-  @BeforeClass
-  public static void setUpBeforeAll() throws LifecycleException, ServletException, MalformedURLException {
-     RestAssured.baseURI = "https://deploy.mydemos.dk/";
-    //RestAssured.port = 80;
-    //RestAssured.basePath = APP_CONTEXT;
-    RestAssured.defaultParser = Parser.JSON;
-  }
+    private static final String APP_CONTEXT = "/jwtbackend";  //IMPORTANT--> this should reflect the value in META-INF/context.xml
+    private static EntityManagerFactory emf;
 
-  @AfterClass
-  public static void tearDownAfterAll() throws LifecycleException {
-   
-  }
+    @Test
+    public void serverIsRunning() {
+        System.out.println("TESTING IF SERVER IS RUNNING");
+        given().when().get().then().statusCode(200);
+    }
+
+    @BeforeClass
+    public static void setUpBeforeAll() throws LifecycleException, ServletException, MalformedURLException {
+        RestAssured.baseURI = "https://deploy.mydemos.dk/";
+        //RestAssured.port = 80;
+        //RestAssured.basePath = APP_CONTEXT;
+        RestAssured.defaultParser = Parser.JSON;
+    }
+
+    @AfterClass
+    public static void tearDownAfterAll() throws LifecycleException {
+
+    }
 }
-
-

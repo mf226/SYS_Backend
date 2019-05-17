@@ -13,7 +13,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,26 +23,18 @@ import javax.ws.rs.POST;
 import utils.PuSelector;
 import utils.SetupTestUsers;
 
-/**
- * REST Web Service
- *
- * @author Fen
- */
 @Path("car")
 public class CarResource {
 
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    EntityManagerFactory emf = PuSelector.getEntityManagerFactory("pu");
-    CarFacade facade = CarFacade.getInstance(emf);
-    DataFetcher df = DataFetcher.getInstance(emf);
-    GenericExceptionMapper gem = new GenericExceptionMapper();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private final EntityManagerFactory EMF = PuSelector.getEntityManagerFactory("pu");
+    private final CarFacade CF = CarFacade.getInstance(EMF);
+    private final DataFetcher DF = DataFetcher.getInstance(EMF);
+    private final GenericExceptionMapper GEM = new GenericExceptionMapper();
 
     @Context
     private UriInfo context;
 
-    /**
-     * Creates a new instance of CarResource
-     */
     public CarResource() {
     }
 
@@ -54,19 +45,19 @@ public class CarResource {
         if (UserFacade.getInstance(PuSelector.getEntityManagerFactory("pu")).getAllUsers().isEmpty()) {
             SetupTestUsers.createTestUsers();
         }
-        return Response.ok().entity(gson.toJson("You are connected")).build();
+        return Response.ok().entity(GSON.toJson("You are connected")).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{regno}/{company}")
     public Response getCar(@PathParam("regno") String regno, @PathParam("company") String company) {
-        
+
         try {
-            CarDTO car = df.getSpecificCar(regno, company);
-            return Response.ok().entity(gson.toJson(car)).build();
+            CarDTO car = DF.getSpecificCar(regno, company);
+            return Response.ok().entity(GSON.toJson(car)).build();
         } catch (Exception ex) {
-            return gem.toResponse(ex);
+            return GEM.toResponse(ex);
 
         }
 
@@ -79,10 +70,10 @@ public class CarResource {
         //List<CarDTO> allCars = DataFetcher;
         List<CarDTO> allCars;
         try {
-            allCars = df.getAllCarsAllAPIs();
-            return Response.ok().entity(gson.toJson(allCars)).build();
+            allCars = DF.getAllCarsAllAPIs();
+            return Response.ok().entity(GSON.toJson(allCars)).build();
         } catch (Exception ex) {
-            return gem.toResponse(ex);
+            return GEM.toResponse(ex);
         }
 
     }
@@ -93,10 +84,10 @@ public class CarResource {
     public Response getAllAvailableCars(@PathParam("start") String start, @PathParam("end") String end) {
         List<CarDTO> allCars;
         try {
-            allCars = df.getAllAvailableCarsAllAPIs(start, end);
-            return Response.ok().entity(gson.toJson(allCars)).build();
+            allCars = DF.getAllAvailableCarsAllAPIs(start, end);
+            return Response.ok().entity(GSON.toJson(allCars)).build();
         } catch (Exception ex) {
-            return gem.toResponse(ex);
+            return GEM.toResponse(ex);
         }
 
     }
@@ -107,10 +98,10 @@ public class CarResource {
     public Response rentAvailableCar(@PathParam("company") String company, @PathParam("regno") String regno, @PathParam("start") String start, @PathParam("end") String end) {
         BookinginformationDTO dto;
         try {
-            dto = df.rentCar(company, regno, start, end);
-            return Response.ok().entity(gson.toJson(dto)).build();
+            dto = DF.rentCar(company, regno, start, end);
+            return Response.ok().entity(GSON.toJson(dto)).build();
         } catch (Exception ex) {
-            return gem.toResponse(ex);
+            return GEM.toResponse(ex);
         }
     }
 
@@ -121,10 +112,10 @@ public class CarResource {
     public Response listOwnCar(String content) {
         CarDTO dto;
         try {
-            dto = facade.listOwnCar(gson.fromJson(content, CarDTO.class));
-            return Response.ok().entity(gson.toJson(dto)).build();
+            dto = CF.listOwnCar(GSON.fromJson(content, CarDTO.class));
+            return Response.ok().entity(GSON.toJson(dto)).build();
         } catch (Exception ex) {
-            return gem.toResponse(ex);
+            return GEM.toResponse(ex);
         }
     }
 }

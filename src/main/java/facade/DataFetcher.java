@@ -30,10 +30,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Fen
- */
 public class DataFetcher {
 
     class FetchCars implements Callable<List<CarDTO>> {

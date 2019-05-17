@@ -2,10 +2,6 @@ package dto;
 
 import java.util.Objects;
 
-/**
- *
- * @author Fen
- */
 public class Company {
 
     private String name;
@@ -55,7 +51,5 @@ public class Company {
         }
         return true;
     }
-    
-
 
 }

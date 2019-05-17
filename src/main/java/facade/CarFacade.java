@@ -14,10 +14,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Fen
- */
 public class CarFacade {
 
     private static EntityManagerFactory emf;

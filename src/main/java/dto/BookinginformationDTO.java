@@ -1,5 +1,5 @@
 package dto;
-//test
+
 import entity.BookingInformation;
 
 public class BookinginformationDTO {

@@ -18,10 +18,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author Fen
- */
 @Entity
 @Table(name = "bookinginformation")
 @NamedQueries({
@@ -138,7 +134,7 @@ public class BookingInformation implements Serializable {
 
     public BookingInformation() {
     }
-    
+
     public BookingInformation(Date startPeriod, Date endPeriod, Date created, double price, String company, String carRegNo, String manufactor, String model, String type, int releaseYear, int drivingDist, int seats, String drive, String fuelType, String longitude, String latitude, String address) {
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;

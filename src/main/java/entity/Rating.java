@@ -1,6 +1,5 @@
 package entity;
 
-import dto.RatingDTO;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,10 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- *
- * @author Fen
- */
 @Entity
 @Table(name = "rating")
 @NamedQueries({
@@ -43,7 +38,7 @@ public class Rating implements Serializable {
 
     public Rating() {
     }
-    
+
     public Rating(int rating, User user) {
         this.rating = rating;
         this.user = user;
@@ -97,5 +92,5 @@ public class Rating implements Serializable {
     public String toString() {
         return "entity.Rating[ id=" + id + " ]";
     }
-    
+
 }

@@ -16,10 +16,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author Fen
- */
 @Entity
 @Table(name = "country")
 @NamedQueries({
@@ -34,7 +30,7 @@ public class Country implements Serializable {
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     private Integer id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -103,5 +99,5 @@ public class Country implements Serializable {
     public String toString() {
         return "entity.Country[ id=" + id + " ]";
     }
-    
+
 }

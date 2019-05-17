@@ -1,6 +1,5 @@
 package facade;
 
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import dto.BookinginformationDTO;
 import entity.BookingInformation;
@@ -11,8 +10,6 @@ import exceptions.FacadeException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,15 +18,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Fen
- */
 public class BookingFacade {
 
     private static EntityManagerFactory emf;

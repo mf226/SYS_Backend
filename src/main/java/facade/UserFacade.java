@@ -1,16 +1,11 @@
 package facade;
 
-import dto.UserDTO;
 import entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import exceptions.AuthenticationException;
 import java.util.List;
-import utils.PuSelector;
 
-/**
- * @author lam@cphbusiness.dk
- */
 public class UserFacade {
 
     private static EntityManagerFactory emf;

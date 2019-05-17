@@ -15,10 +15,6 @@ import org.junit.BeforeClass;
 import testutils.TestUtils;
 import utils.PuSelector;
 
-/**
- *
- * @author mich5
- */
 public class BookingTest {
 
 //    private static BookingFacade facade;
@@ -43,5 +39,4 @@ public class BookingTest {
 //        BookinginformationDTO bookingDTO = facade.createBooking(booking);
 //        assertNotNull(bookingDTO);
 //    }
-
 }

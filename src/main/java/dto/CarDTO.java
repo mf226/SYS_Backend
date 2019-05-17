@@ -83,7 +83,8 @@ public class CarDTO {
 
     public CarDTO(BookingInformation booking) {
         this.regno = booking.getCarRegNo();
-        //this.price = 0; Booking doesn't contain a dayprice
+        // Since booking dosn't contain a dayprice, you can calculate the day price my taking by taking the diffence between start and end and dividing that total price by the diffence
+        this.price = booking.getPrice() / ((booking.getEndPeriod().getTime() - booking.getStartPeriod().getTime()) / 1000 / 60 / 60 / 24);
         this.manufactor = booking.getManufactor();
         this.model = booking.getModel();
         this.type = booking.getType();
@@ -95,7 +96,7 @@ public class CarDTO {
         this.longitude = booking.getLongitude();
         this.latitude = booking.getLatitude();
         this.address = booking.getAddress();
-        //this.country = booking.;
+        this.country = null; // Since booking dosn't contains a country
         this.company = booking.getCompany();
     }
 

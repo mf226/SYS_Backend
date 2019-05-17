@@ -14,7 +14,6 @@ import javax.persistence.EntityManagerFactory;
 
 public class TestUtils {
 
-    // Test data
     private static final String[] R = {"AA12345", "BB12345", "CC12345", "DD12345", "EE12345"};
     private static final double[] P = {50.0, 75.0, 100.0, 125.0, 67.5};
     private static final String[] MA = {"Fiat", "Toyota", "Opel", "Audi", "Volkswagen"};
