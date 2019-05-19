@@ -27,6 +27,7 @@ public class BookinginformationDTO {
         this.endPeriod = booking.getEndPeriod().toString();
         this.created = booking.getCreated().toString();
         this.price = booking.getPrice();
+        this.userName = booking.getUser().getUserName();
         this.car = new CarDTO(booking);
     }
 
